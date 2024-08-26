@@ -18,15 +18,15 @@ const Navbar = () => {
               </span>
             </Link>
             <nav className="flex flex-wrap items-center mb-5 text-base md:mb-0 md:pl-8 md:ml-8 md:border-l md:border-gray-200">
-              <Link href="/projects" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
-                Discover
+              <Link href="/" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                Home
               </Link>
 
               <Link href="/list-project" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
-                Submit a Project
+                Feature Gigs
               </Link>
               <Link href="/profile" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
-                My Profile
+              Contibutor
               </Link>
             </nav>
           </div>

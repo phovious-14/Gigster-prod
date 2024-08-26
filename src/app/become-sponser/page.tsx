@@ -29,9 +29,14 @@ export default function BecomeSponser() {
                     {/* <input type="file" /> */}
                     <p style={{ fontSize: '15px' }} className="mt-4 mb-2">Industry</p>
                     <Select placeholder='Select option' style={{ fontSize: '15px' }}>
-                        <option value='option1'>Option 1</option>
-                        <option value='option2'>Option 2</option>
-                        <option value='option3'>Option 3</option>
+                        <option value='option1'>DAOs</option>
+                        <option value='option2'>Infrastructure</option>
+                        <option value='option3'>DePIN</option>
+                        <option value='option3'>DeFi</option>
+                        <option value='option3'>Consumer dApps</option>
+                        <option value='option3'>Wallets and Payments</option>
+                        <option value='option3'>NFTs</option>
+                        <option value='option3'>Gaming</option>
                     </Select>
                     <FormControl isRequired className="mt-4">
                         <FormLabel style={{ fontSize: '15px' }}>Company short bio</FormLabel>
