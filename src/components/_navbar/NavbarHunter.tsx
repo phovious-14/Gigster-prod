@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import React from 'react';
-import SelectDropDown from './SelectDropDown';
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 
@@ -19,14 +18,14 @@ const Navbar = () => {
             </Link>
             <nav className="flex flex-wrap items-center mb-5 text-base md:mb-0 md:pl-8 md:ml-8 md:border-l md:border-gray-200">
               <Link href="/projects" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
-                Discover
+                Bounty
               </Link>
 
               <Link href="/list-project" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
-                Submit a Project
+                Opportunity
               </Link>
               <Link href="/profile" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
-                My Profile
+                Micro Grant
               </Link>
             </nav>
           </div>

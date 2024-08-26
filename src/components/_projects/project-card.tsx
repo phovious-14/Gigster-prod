@@ -50,6 +50,7 @@ const ProjectCard = ({ item, isOpen, handleSelectProject, onClose, selectedProje
               Donate
             </Button>
           </div>
+          {isOpen && <DonateModal item={selectedProject} onClose={onClose} isOpen={isOpen} index={index} />}
         </div>
       </div>
     </div>
