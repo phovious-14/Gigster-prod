@@ -4,7 +4,6 @@ import { ArrowDownIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 import { openTransak } from '@/components/_onramp/transak';
 import { ArrowTopRightOnSquareIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
 import { getProjectCreated } from '@/subgraph';
-import WithdrawModal from '@/components/_projects/withdraw-modal';
 import { Button, useDisclosure } from '@chakra-ui/react';
 
 const Home = () => {
