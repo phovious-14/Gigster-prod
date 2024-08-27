@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import ProjectCard from '@/components/_projects/project-card';
 import { Button, useDisclosure } from '@chakra-ui/react';
-import { getProjectCreated } from '@/subgraph/index';
 import { useEffect, useState } from 'react';
 
 const Project = () => {
