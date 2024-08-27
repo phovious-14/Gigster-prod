@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import React from 'react';
-import SelectDropDown from './SelectDropDown';
 import { WalletSelector } from "@aptos-labs/wallet-adapter-ant-design";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 
