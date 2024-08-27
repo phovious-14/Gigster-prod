@@ -16,6 +16,7 @@ export default function Bounty({ params }: any) {
     const { userType }: any = useUser();
     const {account} = useWallet()
     const [bounty, setBounty] = useState<any>([])
+    const [projects, setProjects] = useState<any>([])
     const {bountyId} = params
 
     const fetchSubmissions = async () => {
@@ -34,6 +35,21 @@ export default function Bounty({ params }: any) {
           console.error('Error:', error);
           alert('An error occurred while submitting the form');
         }
+
+        
+        try {
+            const response = await fetch(`http://localhost:4000/api/get_projectsOf_bounty_by_id/${bountyId}`);
+            if (response.ok) {
+              const data: any = await response.json() 
+                
+              setProjects(data)
+            } else {
+              alert('Failed to create sponsor profile');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the form');
+          }
       }
     
       useEffect(() => {
@@ -140,7 +156,7 @@ export default function Bounty({ params }: any) {
                                         </div>
                                     </TabPanel>
                                     <TabPanel className="">
-                                        {/* <ProjectList projects={projects} /> */}
+                                        <ProjectList projects={projects} />
                                     </TabPanel>
                                     <TabPanel >
                                         <div className="flex justify-center items-center flex-col w-[60%] p-4 rounded-lg m-auto shadow-md">
