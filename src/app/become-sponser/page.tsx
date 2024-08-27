@@ -34,7 +34,7 @@ console.log("account ", account);
         if(account === null) return
 
         try {
-            const response = await fetch('http://localhost:4000/api/create_sponser_profile', {
+            const response = await fetch('https://gigster-backend-ztso.onrender.com/api/create_sponser_profile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
