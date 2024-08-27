@@ -7,54 +7,114 @@ import { FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
 import ProjectList from "@/components/_projects/ProjectList";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { InputTransactionData, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/router";
+import { Network, Provider } from "aptos";
 
+export const provider = new Provider(Network.TESTNET);
 
 export default function Bounty({ params }: any) {
 
     const { userType }: any = useUser();
-    const {account} = useWallet()
     const [bounty, setBounty] = useState<any>([])
     const [projects, setProjects] = useState<any>([])
-    const {bountyId} = params
+    const { bountyId } = params
+    const { account, signAndSubmitTransaction } = useWallet();
+    const [counter, setCounter] = useState<number>(0);
+    const [transactionInProgress, setTransactionInProgress] = useState<boolean>(false);
+    const [reload, setReload] = useState<number>(0);
+
+    const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
+
+    // balance
+    const [accountBalance, setAccountBalance] = useState<number>(0);
+
+    const [transfers, setTransfers] = useState<{ [key: string]: string }[]>([
+        { address: "", amount: "0" },
+    ]);
+
+    const handleInputChange = (index: number, field: string, value: string) => {
+        const newTransfers = [...transfers];
+        newTransfers[index][field] = value;
+        setTransfers(newTransfers);
+    };
+
+    const addTransfer = () => {
+        setTransfers([...transfers, { address: "", amount: "0" }]);
+    };
+
+    // multiple transfer
+    const aptsend = async () => {
+        if (!account) return [];
+        setTransactionInProgress(true);
+
+        try {
+            const recipients = transfers.map((transfer) => transfer.address);
+            const amounts = transfers.map((transfer) =>
+                (parseFloat(transfer.amount) * 100_000_000).toString()
+            );
+
+            // build a transaction payload to be submited
+            const payload: InputTransactionData = {
+                data: {
+                    function: "0x1::aptos_account::batch_transfer",
+                    typeArguments: [],
+                    functionArguments: [recipients, amounts],
+                },
+            };
+
+            // sign and submit transaction to chain
+            const response = await signAndSubmitTransaction(payload);
+            // wait for transaction
+            await provider.waitForTransaction(response.hash);
+
+            // await fetchAccountBalance();
+
+            //alert
+            alert("All transactions have been successfully sent!");
+        } catch (error: any) {
+            console.log(error);
+        } finally {
+            setTransactionInProgress(false);
+        }
+    };
 
     const fetchSubmissions = async () => {
         // if(account === null) return
         try {
-          const response = await fetch(`http://localhost:4000/api/get_bounty_by_id/${bountyId}`);
-          if (response.ok) {
-            const data: any = await response.json() 
-              console.log("projects", data);
-              
-            setBounty(data)
-          } else {
-            alert('Failed to create sponsor profile');
-          }
+            const response = await fetch(`http://localhost:4000/api/get_bounty_by_id/${bountyId}`);
+            if (response.ok) {
+                const data: any = await response.json()
+                console.log("projects", data);
+
+                setBounty(data)
+            } else {
+                alert('Failed to create sponsor profile');
+            }
         } catch (error) {
-          console.error('Error:', error);
-          alert('An error occurred while submitting the form');
+            console.error('Error:', error);
+            alert('An error occurred while submitting the form');
         }
 
-        
+
         try {
             const response = await fetch(`http://localhost:4000/api/get_projectsOf_bounty_by_id/${bountyId}`);
             if (response.ok) {
-              const data: any = await response.json() 
-                
-              setProjects(data)
+                const data: any = await response.json()
+
+                setProjects(data)
             } else {
-              alert('Failed to create sponsor profile');
+                alert('Failed to create sponsor profile');
             }
-          } catch (error) {
+        } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while submitting the form');
-          }
-      }
-    
-      useEffect(() => {
+        }
+    }
+
+    useEffect(() => {
         fetchSubmissions()
-      }, [account])
+    }, [account])
 
     return (
         <>

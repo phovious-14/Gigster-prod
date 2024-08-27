@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { ArrowDownIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 import { openTransak } from '@/components/_onramp/transak';
 import { ArrowTopRightOnSquareIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
-import { getProjectCreated } from '@/subgraph';
 import { Button, useDisclosure } from '@chakra-ui/react';
 
 const Home = () => {
@@ -208,7 +207,6 @@ const Home = () => {
               ))}
           </ul>
           {(!projects || projects?.length === 0) && <span className="py-4 mx-auto">No data</span>}
-          {isOpen && <WithdrawModal item={selectedProject} onClose={onClose} isOpen={isOpen} />}
         </div>
       </div>
     </>

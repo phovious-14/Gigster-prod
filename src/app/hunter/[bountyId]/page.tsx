@@ -95,9 +95,9 @@ export default function Bounty() {
                             <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300 w-full">Details</p>
                             <div className="flex justify-center items-start flex-col w-full p-6">
                                 <p className="font-bold text-xl text-slate-700">About Gig</p>
-                                <p className="mt-4 mb-6 text-slate-500">Welcome to DSCVR's Canvas Buildathon! We're excited to see you bring your creativity and skills to our platform as you develop embedded apps on DSCVR. DSCVR Canvas is a robust framework for building embedded applications within DSCVR, allowing you to create web applications that run seamlessly in a sandboxed iframe, ensuring user safety with well-defined content security policies.</p>
+                                <p className="mt-4 mb-6 text-slate-500">Welcome to DSCVRs Canvas Buildathon! We are excited to see you bring your creativity and skills to our platform as you develop embedded apps on DSCVR. DSCVR Canvas is a robust framework for building embedded applications within DSCVR, allowing you to create web applications that run seamlessly in a sandboxed iframe, ensuring user safety with well-defined content security policies.</p>
                                 <p className="font-bold text-xl text-slate-700">Developer Instuctions</p>
-                                <p className="mt-4 mb-6 text-slate-500">Building on Canvas is a breeze. Just create a post with your Application's URL. Applications can be built using familiar web UI and server frameworks (Vue, React, NextJS, NextJS, etc), and deployed on the infrastructure of your choice (Vercel, Heroku, Cloudflare, etc). Canvas provides an intuitive and simple way to build and distribute applications on DSCVR. If you like, you can embed your application in multiple posts across different portals/communities. We can't wait to see the innovative solutions you'll create and how you'll push the boundaries of what's possible in the decentralized social media space. Let's build the future of web3 social together!</p>
+                                <p className="mt-4 mb-6 text-slate-500"></p>
                                 <p className="font-bold text-xl text-slate-700">Judging Criteria</p>
                                 <p className="mt-4 mb-6 text-slate-500">hi</p>
                                 <p className="font-bold text-xl text-slate-700">Rewards</p>
@@ -136,7 +136,7 @@ export default function Bounty() {
                         </FormControl>
                         <FormControl className="mt-4">
                             <FormLabel style={{ fontSize: '17px' }}>Anything Else?</FormLabel>
-                            <span className="text-slate-400 text-sm">If you have any other links or information you'd like to share with us, please add them here!</span>
+                            <span className="text-slate-400 text-sm">If you have any other links or information you would like to share with us, please add them here!</span>
                             <Input style={{ fontSize: '14px' }} placeholder='Add info or link' />
                         </FormControl>
                         <FormControl isRequired className="mt-4">
