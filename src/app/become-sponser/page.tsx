@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "@/components/_navbar/Footer";
 import Navbar from "@/components/_navbar/Navbar";
 import { FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
@@ -10,14 +10,14 @@ import { useRouter } from "next/navigation";
 export default function BecomeSponser() {
     const { account } = useWallet()
     const router = useRouter()
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<any>({
         companyName: '',
         companyUsername: '',
         companyUrl: '',
         twitterUrl: '',
         industry: '',
         bio: 'a',
-        walletAddress: account?.address
+        walletAddress: ''
     });
 console.log("account ", account);
 
@@ -52,6 +52,13 @@ console.log("account ", account);
             alert('An error occurred while submitting the form');
         }
     };
+
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            ['walletAddress']: account?.address
+        });
+    }, [account])
 
     return (
         <>
