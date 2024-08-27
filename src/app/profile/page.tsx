@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { ArrowDownIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
-import { openTransak } from '@/components/_onramp/transak';
 import { ArrowTopRightOnSquareIcon, ArrowUpIcon } from '@heroicons/react/20/solid';
 import { Button, useDisclosure } from '@chakra-ui/react';
 
