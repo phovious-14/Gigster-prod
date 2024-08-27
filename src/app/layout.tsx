@@ -9,6 +9,8 @@ import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import { Network } from "aptos";
 import Navbar from '../components/_navbar/Navbar';
 import Footer from '../components/_navbar/Footer';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
+import { UserProvider } from '@/context/UserContext';
 
 const wallets = [new PetraWallet()];
 
@@ -26,20 +28,23 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AptosWalletAdapterProvider
-          plugins={wallets}
-          autoConnect={false}
-          dappConfig={{ network: Network.TESTNET, aptosConnectDappId: "dapp-id" }}
-        >
-          <Navbar />
-          <Providers>{children}</Providers>
-          <Footer />
-        </AptosWalletAdapterProvider>
-
+        <AppRouterCacheProvider>
+          <AptosWalletAdapterProvider
+            plugins={wallets}
+            autoConnect={false}
+            dappConfig={{ network: Network.TESTNET, aptosConnectDappId: "dapp-id" }}
+          >
+            <UserProvider>
+              <Providers>{children}</Providers>
+            </UserProvider>
+          </AptosWalletAdapterProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
+  
 }

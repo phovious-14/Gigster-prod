@@ -1,12 +1,42 @@
 'use client';
+import { useUser } from '@/context/UserContext';
+import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const Banner = () => {
+
+  const { account } = useWallet()
+  const { userType, setUserType }: any = useUser();
+  const route = useRouter()
+
+  const fetchUserType = async () => {
+    if(account === null) return
+    try {
+      const response = await fetch(`http://localhost:4000/api/find_usertype/${account?.address}`);
+      if (response.ok) {
+        const data = await response.json()   
+        setUserType(data.userType)
+        route.push('/dashboard')
+      } else {
+        alert('Failed to create sponsor profile');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while submitting the form');
+    }
+  }
+
+  useEffect(() => {
+    fetchUserType()
+  }, [account])
+
   return (
     <section className="px-2 py-20 bg-white md:px-0">
       <div className="container items-center max-w-6xl px-8 mx-auto xl:px-5">
-        <div className="flex flex-wrap items-center sm:-mx-3">
+        <div className="flex flex-wrap justify-center items-start sm:-mx-3">
           <div className="w-full md:w-1/2 md:px-3">
             <div className="w-full pb-6 space-y-6 font  sm:max-w-md lg:max-w-lg md:space-y-4 lg:space-y-8 xl:space-y-9 sm:pr-5 lg:pr-0 md:pb-0">
               <h1 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-5xl lg:text-5xl xl:text-5xl">
@@ -54,7 +84,7 @@ const Banner = () => {
                   </svg>
                 </Link>
                 <Link
-                  href="/creator/discover"
+                  href="/become-hunter"
                   className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-black  bg-gradient-to-l from-black via-black to-blue-900 rounded-md sm:mb-0 hover:bg-indigo-700 sm:w-auto"
                 >
                   Become Hunter
@@ -77,7 +107,7 @@ const Banner = () => {
           </div>
           <div className="w-full md:w-1/2">
             <div className="w-full flex justify-start items-center flex-col h-[calc(100%_-100px)] overflow-x-hidden p-1 overflow-y-auto container2">
-              <div className="bg-[#ffffff] w-full flex justify-start items-start flex-row p-3 rounded-lg shadow m-1">
+              <div className="bg-[#ffffff] w-full flex justify-start items-start flex-row p-3 rounded-lg shadow-md m-1">
                 <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={50} height={50} alt="" />
                 <div className="flex justify-center items-start flex-col ml-4">
                   <h1 className="text-slate-800 text-base">Bounty name</h1>

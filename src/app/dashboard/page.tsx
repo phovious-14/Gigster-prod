@@ -1,27 +1,84 @@
+"use client"
+
 import Bounty from "@/components/_bounty/Bounty";
+import Footer from "@/components/_navbar/Footer";
+import Navbar from "@/components/_navbar/NavbarHunter";
+import Navbar2 from "@/components/_navbar/NavbarSponser";
+import { useUser } from "@/context/UserContext";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
+    
+  const { userType }: any = useUser();
+  const {account} = useWallet()
+  const [bounties, setBounties] = useState<any>([])
+
+  const fetchBounties = async () => {
+    // if(account === null) return
+    try {
+      const response = await fetch(`http://localhost:4000/api/get_sponser_bounties/${account?.address}`);
+      if (response.ok) {
+        const data: any = await response.json() 
+          
+        setBounties(data)
+      } else {
+        alert('Failed to create sponsor profile');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while submitting the form');
+    }
+  }
+
+  useEffect(() => {
+    fetchBounties()
+  }, [account])
+
+  if(!account) return;
+
     return (
-        <div className="w-full h-screen flex justify-center items-center">
-            <div className="w-[1290px] h-full flex justify-start items-start flex-row">
-                <div className="w-[65%] h-full">
-                    <div className="flex gap-4">
-                        <button className="border-2 border-gray-400 rounded-3xl py-1 px-4 text-sm">Content</button>
-                        <button className="border-2 border-gray-400 rounded-3xl py-1 px-4 text-sm">Event</button>
-                        <button className="border-2 border-gray-400 rounded-3xl py-1 px-4 text-sm">Tech</button>
+        <>
+            {userType === 'hunter' ? <Navbar /> : <Navbar2 />}
+            <div className="w-full h-screen flex justify-center items-center">
+                <div className="w-[1290px] h-full flex justify-between items-start flex-row">
+                    <div className="w-[65%] h-full border border-transparent border-r-gray-300 pr-4">
+                        <div className="flex gap-4">
+                            <button className="border-2 border-gray-400 rounded-3xl py-1 px-4 text-sm">
+                                Content
+                            </button>
+                            <button className="border-2 border-gray-400 rounded-3xl py-1 px-4 text-sm">
+                                Event
+                            </button>
+                            <button className="border-2 border-gray-400 rounded-3xl py-1 px-4 text-sm">
+                                Tech
+                            </button>
+                        </div>
+                        <div className="w-full rounded-lg p-6 text-white text-xl bg-slate-800 mt-4 mb-2">
+                            Welcome Krishn
+                        </div>
+                        <Bounty bounties={bounties} />
                     </div>
-                    <div className="w-full rounded-lg p-6 text-white text-xl bg-slate-800 mt-4 mb-2">
-                        Welcome Krishn
+                    <div className="flex justify-center items-start flex-col w-[34%]">
+                        <div className="flex justify-between items-center flex-row w-full bg-[#ecf4ff] p-6 rounded-lg">
+                            <div className="flex justify-center items-start flex-col w-1/2">
+                                <span className="text-[14px] font-bold">$ 55,000</span>
+                                <span className="text-center text-[12px] mt-2">
+                                    Total value earned
+                                </span>
+                            </div>
+                            <div className="w-[1px] h-[40px] bg-gray-400"></div>
+                            <div className="flex justify-center items-start ml-4 flex-col w-1/2">
+                                <span className="text-[14px] font-bold">14</span>
+                                <span className="text-center text-xs mt-2">
+                                    Opportunity Listed
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <Bounty />
-                </div>
-                <div className="flex justify-center items-start flex-col">
-                    <div className="flex justify-between items-center flex-row w-full bg-gray-300">
-                        Total value earned
-                    </div>
-                    
                 </div>
             </div>
-        </div>
-    )
+            <Footer />
+        </>
+    );
 }
