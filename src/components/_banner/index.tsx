@@ -49,7 +49,7 @@ const Banner = () => {
                 </span>
               </h1>
               <p className="mx-auto text-base text-gray-500 sm:max-w-md font-mono lg:text-xl md:max-w-3xl">
-                {'>'}_ It's never been easier to fund the Gigs on chain.
+                {'>'}_ Contribute. _Grow. _Earn.
               </p>
               <section className="bg-white ">
                 <div className="py-4">

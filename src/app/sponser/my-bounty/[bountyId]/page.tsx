@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Button } from '@chakra-ui/react'
 import ProjectCard from "@/components/_projects/project-card";
 import { FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
 import ProjectList from "@/components/_projects/ProjectList";
@@ -10,8 +10,8 @@ import { useUser } from "@/context/UserContext";
 import { InputTransactionData, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/router";
 import { Network, Provider } from "aptos";
-
-export const provider = new Provider(Network.TESTNET);
+import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
+import DistributeBounty from "@/components/_bounty/DistributeBounty";
 
 export default function Bounty({ params }: any) {
 
@@ -20,67 +20,10 @@ export default function Bounty({ params }: any) {
     const [projects, setProjects] = useState<any>([])
     const { bountyId } = params
     const { account, signAndSubmitTransaction } = useWallet();
-    const [counter, setCounter] = useState<number>(0);
-    const [transactionInProgress, setTransactionInProgress] = useState<boolean>(false);
-    const [reload, setReload] = useState<number>(0);
-
-    const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
-
-    // balance
-    const [accountBalance, setAccountBalance] = useState<number>(0);
-
-    const [transfers, setTransfers] = useState<{ [key: string]: string }[]>([
-        { address: "", amount: "0" },
-    ]);
-
-    const handleInputChange = (index: number, field: string, value: string) => {
-        const newTransfers = [...transfers];
-        newTransfers[index][field] = value;
-        setTransfers(newTransfers);
-    };
-
-    const addTransfer = () => {
-        setTransfers([...transfers, { address: "", amount: "0" }]);
-    };
-
-    // multiple transfer
-    const aptsend = async () => {
-        if (!account) return [];
-        setTransactionInProgress(true);
-
-        try {
-            const recipients = transfers.map((transfer) => transfer.address);
-            const amounts = transfers.map((transfer) =>
-                (parseFloat(transfer.amount) * 100_000_000).toString()
-            );
-
-            // build a transaction payload to be submited
-            const payload: InputTransactionData = {
-                data: {
-                    function: "0x1::aptos_account::batch_transfer",
-                    typeArguments: [],
-                    functionArguments: [recipients, amounts],
-                },
-            };
-
-            // sign and submit transaction to chain
-            const response = await signAndSubmitTransaction(payload);
-            // wait for transaction
-            await provider.waitForTransaction(response.hash);
-
-            // await fetchAccountBalance();
-
-            //alert
-            alert("All transactions have been successfully sent!");
-        } catch (error: any) {
-            console.log(error);
-        } finally {
-            setTransactionInProgress(false);
-        }
-    };
-
+    
     const fetchSubmissions = async () => {
         // if(account === null) return
+        // aptsend()
         try {
             const response = await fetch(`http://localhost:4000/api/get_bounty_by_id/${bountyId}`);
             if (response.ok) {
@@ -219,44 +162,7 @@ export default function Bounty({ params }: any) {
                                         <ProjectList projects={projects} />
                                     </TabPanel>
                                     <TabPanel >
-                                        <div className="flex justify-center items-center flex-col w-[60%] p-4 rounded-lg m-auto shadow-md">
-                                            <div className="flex justify-center gap-4 items-start flex-row w-full m-4">
-                                                <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724739104/Untitled_design_6_pl8foc.png'} alt="" width={30} height={30} />
-
-                                                <FormControl className="">
-                                                    <FormLabel style={{ fontSize: '15px' }}>xyz bounty</FormLabel>
-                                                    <Input style={{ fontSize: '14px' }} placeholder='APT Amount' />
-                                                </FormControl>
-                                            </div>
-                                            <div className="flex justify-center gap-4 items-start flex-row w-full m-4">
-                                                <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724739104/Untitled_design_7_ycdoan.png'} alt="" width={30} height={30} />
-
-                                                <FormControl className="">
-                                                    <FormLabel style={{ fontSize: '15px' }}>xyz bounty</FormLabel>
-                                                    <Input style={{ fontSize: '14px' }} placeholder='APT Amount' />
-                                                </FormControl>
-                                            </div>
-                                            <div className="flex justify-center gap-4 items-start flex-row w-full m-4">
-                                                <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724739104/Untitled_design_8_xgqct9.png'} alt="" width={30} height={30} />
-
-                                                <FormControl className="">
-                                                    <FormLabel style={{ fontSize: '15px' }}>xyz bounty</FormLabel>
-                                                    <Input style={{ fontSize: '14px' }} placeholder='APT Amount' />
-                                                </FormControl>
-                                            </div>
-
-                                            <button className="relative rounded-3xl cursor-pointer py-4 w-[100%]" >
-                                                <div className="flex items-center justify-center bg-slate-800  rounded-lg p-2">
-                                                    <h3
-
-                                                        className="flex cursor-pointer gap-2 items-center text-whitr text-center text-sm font-medium"
-                                                    >
-                                                        <p className="text-base text-white">Distribute 🚀</p>
-                                                    </h3>
-                                                </div>
-                                            </button>
-
-                                        </div>
+                                        <DistributeBounty />
                                     </TabPanel>
                                 </TabPanels>
                             </div>
