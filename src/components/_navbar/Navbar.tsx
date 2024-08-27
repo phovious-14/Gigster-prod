@@ -12,7 +12,7 @@ const Navbar = () => {
           <div className="relative flex flex-col md:flex-row">
             <Link href="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
               <span className="mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                Move club
+                Gigster
                 <span className="text-indigo-600">.</span>
               </span>
             </Link>

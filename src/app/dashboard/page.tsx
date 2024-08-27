@@ -15,7 +15,7 @@ export default function Dashboard() {
   const [bounties, setBounties] = useState<any>([])
 
   const fetchBounties = async () => {
-    // if(account === null) return
+    if(account === null) return
     try {
       const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/get_sponser_bounties/${account?.address}`);
       if (response.ok) {

@@ -13,7 +13,9 @@ const Banner = () => {
   const route = useRouter()
 
   const fetchUserType = async () => {
+
     if(account === null) return
+    
     try {
       const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/find_usertype/${account?.address}`);
       if (response.ok) {
@@ -27,6 +29,7 @@ const Banner = () => {
       console.error('Error:', error);
       alert('An error occurred while submitting the form');
     }
+    
   }
 
   useEffect(() => {
