@@ -13,7 +13,7 @@ const Navbar2 = () => {
           <div className="relative flex flex-col md:flex-row">
             <Link href="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
               <span className="mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                Gigster
+                <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724778211/GigsterXMovClub_Hori_wvxmqz.png'} alt='' width={50} />
                 <span className="text-indigo-600">.</span>
               </span>
             </Link>
