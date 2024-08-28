@@ -24,8 +24,8 @@ const Navbar = () => {
           <div className="relative flex flex-col md:flex-row">
             <Link href="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
               <span className="mx-auto text-xl font-black leading-none text-gray-900 select-none">
-                Gigster
-                <span className="text-indigo-600">.</span>
+                <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724778211/GigsterXMovClub_Hori_wvxmqz.png'} alt='' height={160} width={160} />
+                {/* <span className="text-indigo-600">.</span> */}
               </span>
             </Link>
             <nav className="flex flex-wrap items-center mb-5 text-base md:mb-0 md:pl-8 md:ml-8 md:border-l md:border-gray-200">

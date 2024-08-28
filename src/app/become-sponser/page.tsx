@@ -6,6 +6,7 @@ import Navbar from "@/components/_navbar/Navbar";
 import { FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
+import { useToast } from '@chakra-ui/react'
 
 export default function BecomeSponser() {
     const { account } = useWallet()
@@ -16,9 +17,10 @@ export default function BecomeSponser() {
         companyUrl: '',
         twitterUrl: '',
         industry: '',
-        bio: 'a',
+        bio: '',
         walletAddress: ''
     });
+    const toast = useToast()
 console.log("account ", account);
 
     const handleChange = (e: any) => {
@@ -31,10 +33,20 @@ console.log("account ", account);
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
-        if(account === null) return
+        if(account === null) {
+            toast({
+                title: 'Wallet connection required.',
+                description: "You need to connect aptos wallet",
+                status: 'warning',
+                duration: 2000,
+                isClosable: true,
+              })
+              return
+        }
 
         try {
-            const response = await fetch('https://gigster-backend-ztso.onrender.com/api/create_sponser_profile', {
+            formData.walletAddress = account?.address
+            const response = await fetch('http://localhost:4000/api/create_sponser_profile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +54,13 @@ console.log("account ", account);
                 body: JSON.stringify(formData),
             });
             if (response.ok) {
-                alert('Sponsor profile created successfully!');
+                
+                toast({
+                    title: 'You have become sponser now',
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true,
+                })
                 router.push('/dashboard')
             } else {
                 alert('Failed to create sponsor profile');
@@ -52,13 +70,6 @@ console.log("account ", account);
             alert('An error occurred while submitting the form');
         }
     };
-
-    useEffect(() => {
-        setFormData({
-            ...formData,
-            ['walletAddress']: account?.address
-        });
-    }, [account])
 
     return (
         <>
@@ -100,7 +111,7 @@ console.log("account ", account);
                         </Select>
                         <FormControl isRequired className="mt-4">
                             <FormLabel style={{ fontSize: '15px' }}>Company short bio</FormLabel>
-                            <Input style={{ fontSize: '14px' }} placeholder='Company short bio' name="companyBio" value={formData.bio} onChange={handleChange} />
+                            <Input style={{ fontSize: '14px' }} placeholder='Company short bio' name="bio" value={formData.bio} onChange={handleChange} />
                         </FormControl>
                         <button type="submit" className="text-lg p-3 text-white bg-slate-800 rounded-lg w-full mt-6">Create Sponsor</button>
                     </form>

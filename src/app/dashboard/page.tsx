@@ -6,29 +6,61 @@ import Navbar from "@/components/_navbar/NavbarHunter";
 import Navbar2 from "@/components/_navbar/NavbarSponser";
 import { useUser } from "@/context/UserContext";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
     
-  const { userType }: any = useUser();
+//   const { userType }: any = useUser();
   const {account} = useWallet()
   const [bounties, setBounties] = useState<any>([])
+  const [user, setUser] = useState<any>('')
+  const router = useRouter()
+  const toast = useToast()
 
   const fetchBounties = async () => {
-    if(account === null) return
+
+    if(account === null) router.push('/')
+
     try {
-      const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/get_sponser_bounties/${account?.address}`);
-      if (response.ok) {
-        const data: any = await response.json() 
-          
-        setBounties(data)
-      } else {
-        alert('Failed to create sponsor profile');
-      }
+        const response = await fetch(`http://localhost:4000/api/find_usertype/${account?.address}`);
+        if (response.ok) {
+            const data: any = await response.json() 
+            if(data.userType === '') {
+                toast({
+                    title: 'Kindly create profile',
+                    status: 'info',
+                    duration: 2000,
+                    isClosable: true,
+                })
+                router.push('/')
+            }
+
+            try {
+                const response = await fetch(data.userType === 'sponser' ? `http://localhost:4000/api/get_sponser_bounties/${account?.address}` : `http://localhost:4000/api/get_all_bounties`);
+                if (response.ok) {
+                  const data: any = await response.json() 
+                    
+                  setBounties(data)
+                } else {
+                  alert('Failed to load api');
+                }
+              } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the form');
+              }
+            
+            localStorage.setItem('userType', data?.userType)
+            setUser(data)
+        } else {
+            alert('Failed to create sponsor profile');
+        }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while submitting the form');
+        
     }
+
+    
   }
 
   useEffect(() => {
@@ -39,7 +71,7 @@ export default function Dashboard() {
 
     return (
         <>
-            {userType === 'hunter' ? <Navbar /> : <Navbar2 />}
+            {user?.userType === 'hunter' ? <Navbar /> : <Navbar2 />}
             <div className="w-full h-screen flex justify-center items-center">
                 <div className="w-[1290px] h-full flex justify-between items-start flex-row">
                     <div className="w-[65%] h-full border border-transparent border-r-gray-300 pr-4">
@@ -55,7 +87,7 @@ export default function Dashboard() {
                             </button>
                         </div>
                         <div className="w-full rounded-lg p-6 text-white text-xl bg-slate-800 mt-4 mb-2">
-                            Welcome Krishn
+                            Welcome {user?.userType === 'hunter' ? user?.user?.name : user?.user?.companyName}
                         </div>
                         <Bounty bounties={bounties} />
                     </div>

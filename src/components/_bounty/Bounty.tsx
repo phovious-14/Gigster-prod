@@ -5,13 +5,13 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { formatDateToDDMMYYYYHM } from "../formatDateToDDMMYYYYHM/formatDateToDDMMYYYYHM";
 
 export default function Bounty({ bounties }: any) {
 
     const { userType }: any = useUser();
     const { account } = useWallet()
     console.log(bounties);
-    
 
     return (
         <div className="w-full flex justify-start items-center flex-col h-[calc(100%_-100px)] overflow-x-hidden p-1 overflow-y-auto container2">
@@ -31,7 +31,7 @@ export default function Bounty({ bounties }: any) {
                                 <div className="text-slate-400 ml-2">|</div>
                                 <div className="text-slate-400 text-sm flex ml-2 mt-[2px]">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><path fill="#94A3B8" d="M11.5 3a9.5 9.5 0 0 1 9.5 9.5a9.5 9.5 0 0 1-9.5 9.5A9.5 9.5 0 0 1 2 12.5A9.5 9.5 0 0 1 11.5 3m0 1A8.5 8.5 0 0 0 3 12.5a8.5 8.5 0 0 0 8.5 8.5a8.5 8.5 0 0 0 8.5-8.5A8.5 8.5 0 0 0 11.5 4M11 7h1v5.42l4.7 2.71l-.5.87l-5.2-3z" /></svg>
-                                    <span className="ml-1">3 day left</span>
+                                    <span className="ml-1">Deadline {formatDateToDDMMYYYYHM(item?.endAt)}</span>
                                 </div>
                                 <div className="text-slate-400 ml-2">|</div>
                                 <div className="text-slate-400 text-sm flex ml-3 mt-[2px] justify-start items-center">

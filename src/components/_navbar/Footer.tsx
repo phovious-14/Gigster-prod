@@ -1,12 +1,17 @@
+import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 export default function Footer() {
   return (
     <section className="text-gray-700 bg-white body-font">
       <div className="container flex flex-col items-center px-8 py-8 mx-auto max-w-7xl sm:flex-row">
-        <a href="#_" className="text-xl font-black leading-none text-gray-900 select-none logo">
-          Gigster<span className="text-indigo-600">.</span>
-        </a>
+            <Link href="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
+              <span className="mx-auto text-xl font-black leading-none text-gray-900 select-none">
+                <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724778211/GigsterXMovClub_Hori_wvxmqz.png'} alt='' height={120} width={120} />
+                {/* <span className="text-indigo-600">.</span> */}
+              </span>
+            </Link>
         
         <span className="inline-flex justify-center mt-4 space-x-5 sm:ml-auto sm:mt-0 sm:justify-start">
           <a href="#" className="text-gray-400 hover:text-gray-500">

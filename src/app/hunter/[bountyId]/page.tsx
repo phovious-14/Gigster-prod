@@ -14,12 +14,113 @@ import {
     FormControl,
     FormLabel,
     Input,
+    useToast,
 } from '@chakra-ui/react';
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useRouter } from "next/navigation";
+import { formatDateToDDMMYYYYHM } from "@/components/formatDateToDDMMYYYYHM/formatDateToDDMMYYYYHM";
 
-export default function Bounty() {
+export default function Bounty({ params }: any) {
+
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { account } = useWallet()
+    const [bounty, setBounty] = useState<any>([])
+    const [isSubmitted, setIsSubmitted] = useState<Boolean>(false)
+    const router = useRouter()
     const btnRef = useRef(null)
+    const { bountyId } = params
+
+    const [formData, setFormData] = useState<any>({
+        submissionLink: '',
+        twitterLink: '',
+        anythingElse: '',
+        inputWalletAddress: ''
+    });
+    const toast = useToast()
+
+    const handleChange = (e: any) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+
+        if (account === null) {
+            toast({
+                title: 'Wallet connection required.',
+                description: "You need to connect aptos wallet",
+                status: 'warning',
+                duration: 2000,
+                isClosable: true,
+            })
+            return
+        }
+
+        try {
+            formData.walletAddress = account?.address
+            const response = await fetch(`http://localhost:4000/api/create_bounty_submission/${bountyId}/${account?.address}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+
+                toast({
+                    title: 'You have submiite project!',
+                    status: 'success',
+                    duration: 2000,
+                    isClosable: true,
+                })
+                onClose()
+                router.push('/dashboard')
+            } else {
+                alert('Failed to create sponsor profile');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while submitting the form');
+        }
+    };
+
+    const fetchBounty = async () => {
+
+        if (account === null) router.push('/')
+
+        try {
+            const response = await fetch(`http://localhost:4000/api/get_bounty_by_id/${bountyId}`);
+            if (response.ok) {
+                const data: any = await response.json()
+                setBounty(data)
+            } else {
+                alert('Failed to create sponsor profile');
+            }
+
+            const response2 = await fetch(`http://localhost:4000/api/checkBountySubmitted/${bountyId}/${account?.address}`);
+            if (response2.ok) {
+                const data: any = await response2.json()
+                console.log("is submitted", data?.isSubmitted);
+
+                setIsSubmitted(data?.isSubmitted)
+            } else {
+                alert('Failed to create sponsor profile');
+            }
+
+        } catch (error) {
+            console.log(error);
+
+        }
+
+    }
+
+    useEffect(() => {
+        fetchBounty()
+    }, [bountyId, account])
 
     return (
         <>
@@ -28,11 +129,11 @@ export default function Bounty() {
                     <div className="w-full flex justify-start items-start flex-row p-4 rounded-lg shadow-md m-1">
                         <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={50} height={50} alt="" />
                         <div className="flex justify-center items-start flex-col ml-4">
-                            <h1 className="text-slate-800 font-bold text-lg">Bounty name</h1>
+                            <h1 className="text-slate-800 font-bold text-lg">{bounty?.title}</h1>
                             <div className="flex mt-1 ml-4 text-base text-gray-600 font-light">
                                 <div className="flex -ml-5">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="0 0 24 24"><path fill="#4b5563" d="M12 11q.825 0 1.413-.587T14 9t-.587-1.412T12 7t-1.412.588T10 9t.588 1.413T12 11m-3.615 9v-1H11.5v-3.754q-1.321-.236-2.312-1.105T7.823 11.99q-1.586-.187-2.705-1.301T4 8V7q0-.402.299-.701T5 6h2.654V4h8.692v2H19q.402 0 .701.299T20 7v1q0 1.573-1.118 2.688t-2.705 1.3q-.373 1.285-1.364 2.153T12.5 15.246V19h3.115v1zm-.731-9.084V7H5v1q0 1.142.762 1.963t1.892.953M12 14.269q1.385 0 2.346-.961q.962-.962.962-2.347V5H8.692v5.962q0 1.384.962 2.346q.961.961 2.346.961m4.346-3.354q1.131-.132 1.892-.952T19 8V7h-2.654zM12 9.636" /></svg>
-                                    <span className="ml-1">Bounty</span>
+                                    <span className="ml-1">{bounty?.category}</span>
                                 </div>
                                 <div className="ml-2">|</div>
                                 <div className="flex ml-2 mt-[2px]">
@@ -48,7 +149,7 @@ export default function Bounty() {
                         </div>
                         <div className="flex justify-end flex-row items-center flex-grow ">
                             <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={20} height={20} alt="" />
-                            <span className="text-lg text-slate-800 ml-4 mr-2">100</span>
+                            <span className="text-lg text-slate-800 ml-4 mr-2">{bounty?.budget}</span>
                             <span className="text-slate-400 text-base"> APT</span>
                         </div>
                     </div>
@@ -59,12 +160,12 @@ export default function Bounty() {
                                 <div className="flex justify-start items-center gap-2 p-2">
                                     <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={30} height={30} alt="" />
                                     <div>
-                                        <span className="text-lg font-bold text-slate-800">10000</span>
+                                        <span className="text-lg font-bold text-slate-800">{bounty.budget}</span>
                                         <span className="ml-2">APT</span>
                                         <span className="text-slate-500 ml-4">Total Prizes</span>
                                     </div>
                                 </div>
-                                <div className="p-2 ml-1">
+                                {/* <div className="p-2 ml-1">
                                     <div>
                                         <span className="text-base text-slate-800">🥇 5000</span>
                                         <span className="ml-2">APT</span>
@@ -77,35 +178,35 @@ export default function Bounty() {
                                         <span className="text-base text-slate-800">🥉 2000</span>
                                         <span className="ml-2">APT</span>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="flex justify-between items-start flex-row mt-4">
-                                    <div className="flex justify-center p-2 items-start flex-row w-[49%] bg-[#f3f6fd] rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#616161" d="M20.172 6.75h-1.861l-4.566 4.564a1.874 1.874 0 1 1-1.06-1.06l4.565-4.565V3.828a.94.94 0 0 1 .275-.664l1.73-1.73a.25.25 0 0 1 .25-.063c.089.026.155.1.173.191l.46 2.301l2.3.46c.09.018.164.084.19.173a.25.25 0 0 1-.062.249l-1.731 1.73a.94.94 0 0 1-.663.275" /><path fill="#616161" d="M2.625 12A9.375 9.375 0 0 0 12 21.375A9.375 9.375 0 0 0 21.375 12c0-.898-.126-1.766-.361-2.587A.75.75 0 0 1 22.455 9c.274.954.42 1.96.42 3c0 6.006-4.869 10.875-10.875 10.875S1.125 18.006 1.125 12S5.994 1.125 12 1.125c1.015-.001 2.024.14 3 .419a.75.75 0 1 1-.413 1.442A9.4 9.4 0 0 0 12 2.625A9.375 9.375 0 0 0 2.625 12" /><path fill="#616161" d="M7.125 12a4.874 4.874 0 1 0 9.717-.569a.748.748 0 0 1 1.047-.798c.251.112.42.351.442.625a6.373 6.373 0 0 1-10.836 5.253a6.376 6.376 0 0 1 5.236-10.844a.75.75 0 1 1-.17 1.49A4.876 4.876 0 0 0 7.125 12" /></svg>
-                                        <span className="text-slate-800 text-lg ml-4 -mt-1">61 Submission</span>
+                                    <div className="flex justify-start p-4 items-ceenter flex-col w-[49%] bg-[#f3f6fd] rounded-lg">
+                                        <span className="text-sm text-slate-600">Total Submissions</span>
+                                        <span className="text-slate-800 text-sm font-bold text-center mt-1">61</span>
                                     </div>
-                                    <div className="flex justify-center p-2 items-start flex-row w-[49%] bg-[#f3f6fd] rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 48 48"><g fill="none" stroke="#616161" stroke-linejoin="round" stroke-width="4"><path d="M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4S4 12.954 4 24s8.954 20 20 20Z" /><path stroke-linecap="round" d="M24.008 12v12.01l8.479 8.48" /></g></svg>
-                                        <span className="text-slate-800 text-lg ml-4 -mt-1">11d:02h:34m Remaining</span>
+                                    <div className="flex justify-start p-4 items-center flex-col w-[49%] bg-[#f3f6fd] rounded-lg">
+                                        <span className="text-sm text-slate-600">Deadline</span>
+                                        <span className="text-slate-800 text-sm font-bold text-center mt-1">{formatDateToDDMMYYYYHM(bounty?.endAt)}</span>
                                     </div>
                                 </div>
-                                <button className="w-full bg-slate-800 text-white p-2 rounded-lg mt-4" ref={btnRef} onClick={onOpen}>Submit Now</button>
+                                {isSubmitted ? <button disabled className="w-full bg-slate-600 text-white p-2 rounded-lg mt-4">Submitted</button> : <button className="w-full bg-slate-800 text-white p-2 rounded-lg mt-4" ref={btnRef} onClick={onOpen}>Submit Now</button>}
                             </div>
                         </div>
                         <div className="w-[70%] flex justify-start items-start flex-col">
                             <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300 w-full">Details</p>
                             <div className="flex justify-center items-start flex-col w-full p-6">
                                 <p className="font-bold text-xl text-slate-700">About Gig</p>
-                                <p className="mt-4 mb-6 text-slate-500">Welcome to DSCVRs Canvas Buildathon! We are excited to see you bring your creativity and skills to our platform as you develop embedded apps on DSCVR. DSCVR Canvas is a robust framework for building embedded applications within DSCVR, allowing you to create web applications that run seamlessly in a sandboxed iframe, ensuring user safety with well-defined content security policies.</p>
+                                <p className="mt-4 mb-6 text-slate-500">{bounty?.about}</p>
                                 <p className="font-bold text-xl text-slate-700">Developer Instuctions</p>
-                                <p className="mt-4 mb-6 text-slate-500"></p>
+                                <p className="mt-4 mb-6 text-slate-500">{bounty?.devInstructions}</p>
                                 <p className="font-bold text-xl text-slate-700">Judging Criteria</p>
-                                <p className="mt-4 mb-6 text-slate-500">hi</p>
+                                <p className="mt-4 mb-6 text-slate-500">{bounty?.judgingCriteria}</p>
                                 <p className="font-bold text-xl text-slate-700">Rewards</p>
-                                <p className="mt-4 mb-6 text-slate-500">hi</p>
+                                <p className="mt-4 mb-6 text-slate-500">{bounty?.rewardDistribution}</p>
                                 <p className="font-bold text-xl text-slate-700">Submission Requirements</p>
-                                <p className="mt-4 mb-6 text-slate-500">Submit your Canvas link here on Earn and Post your Canvas on DSCVR https://dscvr.one/p/canvastesting</p>
+                                <p className="mt-4 mb-6 text-slate-500">{bounty?.submissionRequirement}</p>
                                 <p className="font-bold text-xl text-slate-700">Resources</p>
-                                <p className="mt-4 mb-6 text-slate-500">hi</p>
+                                <p className="mt-4 mb-6 text-slate-500">{bounty?.resources}</p>
                             </div>
                         </div>
                     </div>
@@ -127,26 +228,26 @@ export default function Bounty() {
                         <FormControl isRequired className="mt-4">
                             <FormLabel style={{ fontSize: '17px' }}>Link To Your Submission </FormLabel>
                             <span className="text-slate-400 text-sm">Make sure this link is accessible by everyone!</span>
-                            <Input style={{ fontSize: '14px' }} placeholder='Link to your submission' />
+                            <Input style={{ fontSize: '14px' }} placeholder='Link to your submission' name="submissionLink" value={formData.submissionLink} onChange={handleChange} />
                         </FormControl>
                         <FormControl className="mt-4">
                             <FormLabel style={{ fontSize: '17px' }}>Tweet Link</FormLabel>
                             <span className="text-slate-400 text-sm">This helps sponsors discover (and maybe repost) your work on Twitter! If this submission is for a Twitter thread bounty, you can ignore this field.</span>
-                            <Input style={{ fontSize: '14px' }} placeholder='Add a tweet link' />
+                            <Input style={{ fontSize: '14px' }} placeholder='Add a tweet link' name="twitterLink" value={formData.twitterLink} onChange={handleChange} />
                         </FormControl>
                         <FormControl className="mt-4">
                             <FormLabel style={{ fontSize: '17px' }}>Anything Else?</FormLabel>
                             <span className="text-slate-400 text-sm">If you have any other links or information you would like to share with us, please add them here!</span>
-                            <Input style={{ fontSize: '14px' }} placeholder='Add info or link' />
+                            <Input style={{ fontSize: '14px' }} placeholder='Add info or link' name="anythingElse" value={formData.anythingElse} onChange={handleChange} />
                         </FormControl>
                         <FormControl isRequired className="mt-4">
                             <FormLabel style={{ fontSize: '17px' }}>Your Aptos Wallet Address</FormLabel>
-                            <Input style={{ fontSize: '14px' }} placeholder='Add your aptos wallet address' />
+                            <Input style={{ fontSize: '14px' }} placeholder='Add your aptos wallet address' name="inputWalletAddress" value={formData.inputWalletAddress} onChange={handleChange} />
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
                         <ModalFooter>
-                            <Button colorScheme='' style={{background: '#1e293b'}} mr={3}>
+                            <Button colorScheme='' style={{ background: '#1e293b' }} mr={3} onClick={handleSubmit}>
                                 Submit
                             </Button>
                             <Button onClick={onClose}>Cancel</Button>
