@@ -66,7 +66,7 @@ export default function FAQs() {
                             </AccordionButton>
                         </h2>
                         <AccordionPanel pb={4} padding={4}>
-                            After creating an account, navigate to the "Creeate Gig" section. Fill in the details of your task, including description, required skills, deadline, and reward amount. Once submitted, your bounty/job will be visible to potential freelancers/hunters.
+                            After creating an account, navigate to the Creeate Gig section. Fill in the details of your task, including description, required skills, deadline, and reward amount. Once submitted, your bounty/job will be visible to potential freelancers/hunters.
                         </AccordionPanel>
                     </AccordionItem>
                     <AccordionItem>
@@ -79,7 +79,7 @@ export default function FAQs() {
                             </AccordionButton>
                         </h2>
                         <AccordionPanel pb={4} padding={4}>
-                            After creating your hunter profile, you can browse available jobs/bounties in the "dashboard" section. Use filters to find tasks that match your skills and interests.
+                            After creating your hunter profile, you can browse available jobs/bounties in the dashboard section. Use filters to find tasks that match your skills and interests.
                         </AccordionPanel>
                     </AccordionItem>
                     <AccordionItem>
@@ -92,7 +92,7 @@ export default function FAQs() {
                             </AccordionButton>
                         </h2>
                         <AccordionPanel pb={4} padding={4}>
-                            Once you complete a task and it's verified by the project owner, the reward is transferred by bounty owner to your Aptos wallet address associated with your account.
+                            Once you complete a task and its verified by the project owner, the reward is transferred by bounty owner to your Aptos wallet address associated with your account.
                         </AccordionPanel>
                     </AccordionItem>
                 </Accordion>
