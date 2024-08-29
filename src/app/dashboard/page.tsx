@@ -92,7 +92,7 @@ export default function Dashboard() {
                         <div className="w-full rounded-lg p-6 text-white text-xl bg-slate-800 mt-4 mb-2">
                             Welcome {user?.userType === 'hunter' ? user?.user?.name : user?.user?.companyName}
                         </div>
-                        {loading ? <Bounty bounties={bounties} userType={user?.userType} /> : <div className="h-screen w-screen flex justify-center items-center"><div className="loading"></div></div>}
+                        {!loading ? <Bounty bounties={bounties} userType={user?.userType} /> : <div className="h-screen w-screen flex justify-center items-center"><div className="loading"></div></div>}
                     </div>
                     <div className="flex justify-center items-start flex-col w-[34%]">
                         <div className="flex justify-between items-center flex-row w-full bg-[#ecf4ff] p-6 rounded-lg">
