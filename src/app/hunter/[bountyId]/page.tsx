@@ -63,7 +63,7 @@ export default function Bounty({ params }: any) {
 
         try {
             formData.walletAddress = account?.address
-            const response = await fetch(`http://localhost:4000/api/create_bounty_submission/${bountyId}/${account?.address}`, {
+            const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/create_bounty_submission/${bountyId}/${account?.address}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export default function Bounty({ params }: any) {
         if (account === null) router.push('/')
 
         try {
-            const response = await fetch(`http://localhost:4000/api/get_bounty_by_id/${bountyId}`);
+            const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/get_bounty_by_id/${bountyId}`);
             if (response.ok) {
                 const data: any = await response.json()
                 setBounty(data)
@@ -102,7 +102,7 @@ export default function Bounty({ params }: any) {
                 alert('Failed to create sponsor profile');
             }
 
-            const response2 = await fetch(`http://localhost:4000/api/checkBountySubmitted/${bountyId}/${account?.address}`);
+            const response2 = await fetch(`https://gigster-backend-ztso.onrender.com/api/checkBountySubmitted/${bountyId}/${account?.address}`);
             if (response2.ok) {
                 const data: any = await response2.json()
                 console.log("is submitted", data?.isSubmitted);

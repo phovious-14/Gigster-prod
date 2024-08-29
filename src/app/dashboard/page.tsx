@@ -24,7 +24,7 @@ export default function Dashboard() {
     if(account === null) router.push('/')
 
     try {
-        const response = await fetch(`http://localhost:4000/api/find_usertype/${account?.address}`);
+        const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/find_usertype/${account?.address}`);
         if (response.ok) {
             const data: any = await response.json() 
             if(data.userType === '') {
@@ -38,7 +38,7 @@ export default function Dashboard() {
             }
 
             try {
-                const response = await fetch(data.userType === 'sponser' ? `http://localhost:4000/api/get_sponser_bounties/${account?.address}` : `http://localhost:4000/api/get_all_bounties`);
+                const response = await fetch(data.userType === 'sponser' ? `https://gigster-backend-ztso.onrender.com/api/get_sponser_bounties/${account?.address}` : `https://gigster-backend-ztso.onrender.com/api/get_all_bounties`);
                 if (response.ok) {
                   const data: any = await response.json() 
                     
