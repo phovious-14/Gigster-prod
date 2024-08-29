@@ -39,10 +39,10 @@ const Banner = () => {
 
   return (
     <section className="px-2 py-20 bg-white md:px-0">
-      <div className='w-[400px] h-[400px] fixed top-[150px] -left-[200px] bg-slate-900 rotate-45 flex justify-end items-center flex-row'>
+      <div className='w-[400px] h-[400px] absolute top-[150px] -left-[200px] bg-slate-900 rotate-45 flex justify-end items-center flex-row'>
       <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724917106/white_gigster_logo_bg_rm_odpfxf.png'} className='-rotate-45 -mt-[180px] mr-12' alt="" width={140} height={140} />
       </div>
-      <div className='w-[400px] h-[400px] fixed top-[150px] -right-[200px] bg-slate-900 rotate-45 flex justify-start items-center flex-row'>
+      <div className='w-[400px] h-[400px] absolute top-[150px] -right-[200px] bg-slate-900 rotate-45 flex justify-start items-center flex-row'>
         <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724916905/White_MoveClub_bg_rm_fgm34e.png'} className='-rotate-45 mt-32 ml-12' alt="" width={120} height={120} />
       </div>
       <div className="container items-center max-w-6xl px-8 mx-auto xl:px-5">
@@ -78,7 +78,7 @@ const Banner = () => {
                   href="/become-sponser"
                   className="flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-black  bg-gradient-to-r from-black via-black to-blue-900 rounded-md sm:mb-0 hover:bg-indigo-700 sm:w-auto"
                 >
-                  Become Sponser
+                  Become Sponsor
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="w-5 h-5 ml-1"

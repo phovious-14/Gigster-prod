@@ -15,6 +15,7 @@ export default function Dashboard() {
 //   const { userType }: any = useUser();
   const {account} = useWallet()
   const [bounties, setBounties] = useState<any>([])
+  const [loading, setLoading] = useState<Boolean>(false)
   const [user, setUser] = useState<any>('')
   const router = useRouter()
   const toast = useToast()
@@ -38,11 +39,13 @@ export default function Dashboard() {
             }
 
             try {
+                setLoading(true)
                 const response = await fetch(data.userType === 'sponser' ? `https://gigster-backend-ztso.onrender.com/api/get_sponser_bounties/${account?.address}` : `https://gigster-backend-ztso.onrender.com/api/get_all_bounties`);
                 if (response.ok) {
                   const data: any = await response.json() 
                     
                   setBounties(data)
+                  setLoading(false)
                 } else {
                   alert('Failed to load api');
                 }
@@ -89,19 +92,19 @@ export default function Dashboard() {
                         <div className="w-full rounded-lg p-6 text-white text-xl bg-slate-800 mt-4 mb-2">
                             Welcome {user?.userType === 'hunter' ? user?.user?.name : user?.user?.companyName}
                         </div>
-                        <Bounty bounties={bounties} userType={user?.userType} />
+                        {loading ? <Bounty bounties={bounties} userType={user?.userType} /> : <div className="h-screen w-screen flex justify-center items-center"><div className="loading"></div></div>}
                     </div>
                     <div className="flex justify-center items-start flex-col w-[34%]">
                         <div className="flex justify-between items-center flex-row w-full bg-[#ecf4ff] p-6 rounded-lg">
                             <div className="flex justify-center items-start flex-col w-1/2">
-                                <span className="text-[14px] font-bold">$ 55,000</span>
+                                <span className="font-bold text-lg">$ 55,000</span>
                                 <span className="text-center text-[12px] mt-2">
                                     Total value earned
                                 </span>
                             </div>
                             <div className="w-[1px] h-[40px] bg-gray-400"></div>
                             <div className="flex justify-center items-start ml-4 flex-col w-1/2">
-                                <span className="text-[14px] font-bold">14</span>
+                                <span className="text-lg font-bold">14</span>
                                 <span className="text-center text-xs mt-2">
                                     Opportunity Listed
                                 </span>

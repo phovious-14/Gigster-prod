@@ -47,7 +47,7 @@ export default function CreateGig() {
                 duration: 2000,
                 isClosable: true,
               })
-              return
+              return router.push('/')
         }
 
         try {
@@ -81,7 +81,7 @@ export default function CreateGig() {
         <>
             <div className="w-full flex justify-center items-center">
                 <div className="w-[600px] flex justify-center items-center flex-col rounded-xl">
-                    <span className="text-slate-800 text-xl font-bold text-center p-2">Gigster</span>
+                    <span className="text-slate-800 text-xl font-bold text-center p-2">Make Gig</span>
                     <form className="flex justify-center items-start flex-col shadow-md mt-4 w-full p-6" onSubmit={handleSubmit}>
                         <FormControl isRequired className="">
                             <FormLabel style={{ fontSize: '15px' }}>Headline of bounty</FormLabel>

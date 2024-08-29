@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { StarIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { Code } from '@chakra-ui/react';
 import Link from 'next/link';
+import { formatDateToDDMMYYYYHM } from '../formatDateToDDMMYYYYHM/formatDateToDDMMYYYYHM';
 
 const ProjectCard = ({ item, index, onSelectWinner }: any) => {
   const [winnerRank, setWinnerRank] = useState<number | null>(null);
@@ -46,16 +47,16 @@ const ProjectCard = ({ item, index, onSelectWinner }: any) => {
             {/* image */}
           </div>
         </div>
-        <h3 className="mb-2">Submitted At: {item.submittedAt}</h3>
+        <h3 className="mb-2">Submitted At: {formatDateToDDMMYYYYHM(item.submittedAt)}</h3>
         <Code>by {item.submittedBy}</Code> <br />
         <hr style={{ color: '#C4C4C4' }} />
-        <div className="relative rounded-3xl cursor-pointer py-4" onClick={() => openInNewTab('www.google.com')}>
+        <a className="relative rounded-3xl cursor-pointer py-4" href={item?.submissionLink}>
           <div className="flex items-center justify-center bg-slate-800  rounded-lg p-1">
             <h3 className="flex cursor-pointer gap-2 items-center text-white text-center text-sm font-medium">
               <p>View</p> <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
             </h3>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   );
