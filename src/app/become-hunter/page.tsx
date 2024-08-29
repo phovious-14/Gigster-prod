@@ -84,7 +84,7 @@ export default function BecomeHunter() {
     };
 
     return (
-        <>
+        <div className="h-screen w-screen">
             <Navbar />
             <div className="w-full mt-24 flex justify-center items-center">
                 <div className="w-[600px] flex justify-center items-center flex-col rounded-xl">
@@ -145,6 +145,6 @@ export default function BecomeHunter() {
                 </div>
             </div>
             <Footer />
-        </>
+        </div>
     )
 }

@@ -22,11 +22,14 @@ const Navbar = () => {
                 Home
               </Link>
 
-              <a href="#" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+              <a href="#feature-gigs" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Feature Gigs
               </a>
-              <a href="#" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+              {/* <a href="#" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Contibutor
+              </a> */}
+              <a href="#faqs" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                FAQs
               </a>
               <Link href="/get-in-touch" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Get In Touch

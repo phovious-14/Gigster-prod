@@ -11,9 +11,9 @@ import {
 
 export default function FAQs() {
     return (
-        <div className='w-screen h-screen flex justify-center items-center flex-col'>
-            <h1 className='text-3xl text-slate-800 text-center mb-16'>FAQs</h1>
-            <div className='w-[60%] h-full '>
+        <div id='faqs' className='w-screen h-screen flex justify-center items-center flex-col mt-24'>
+            <h1 className='text-3xl text-slate-800 text-center '>FAQs</h1>
+            <div className='w-[60%] h-full mt-16'>
                 <Accordion>
                     <AccordionItem>
                         <h2>
