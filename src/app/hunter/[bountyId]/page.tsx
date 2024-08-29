@@ -35,8 +35,7 @@ export default function Bounty({ params }: any) {
         title: '',
         submissionLink: '',
         twitterLink: '',
-        anythingElse: '',
-        inputWalletAddress: ''
+        anythingElse: ''
     });
     const toast = useToast()
 
@@ -244,10 +243,6 @@ export default function Bounty({ params }: any) {
                             <FormLabel style={{ fontSize: '17px' }}>Anything Else?</FormLabel>
                             <span className="text-slate-400 text-sm">If you have any other links or information you would like to share with us, please add them here!</span>
                             <Input style={{ fontSize: '14px' }} placeholder='Add info or link' name="anythingElse" value={formData.anythingElse} onChange={handleChange} />
-                        </FormControl>
-                        <FormControl isRequired className="mt-4">
-                            <FormLabel style={{ fontSize: '17px' }}>Your Aptos Wallet Address</FormLabel>
-                            <Input style={{ fontSize: '14px' }} placeholder='Add your aptos wallet address' name="inputWalletAddress" value={formData.inputWalletAddress} onChange={handleChange} />
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>

@@ -14,15 +14,17 @@ const WinnerList = ({ bountyId, winners, projects, handleRepick }: any) => {
 
     const handleAnnounce = async () => {
       try {
+        console.log(projects);
+        
         const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/add_winners/${bountyId}/${account?.address}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              winner1SubmissionId: projects[0]._id,
-              winner2SubmissionId: projects[1]._id,
-              winner3SubmissionId: projects[3]._id
+              winner1SubmissionId: projects[winners[0]]?._id,
+              winner2SubmissionId: projects[winners[1]]?._id,
+              winner3SubmissionId: projects[winners[2]]?._id
             })
         });
         if (response.ok) {

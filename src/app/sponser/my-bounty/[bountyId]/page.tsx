@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
 import { InputTransactionData, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
-import { Network, Provider } from "aptos";
+import { Network, Provider } from "aptos";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import DistributeBounty from "@/components/_bounty/DistributeBounty";
 import WinnerList from "@/components/winner_list/WinnerList";
@@ -23,9 +23,9 @@ export default function Bounty({ params }: any) {
     const [winnerList, setWinnerList] = useState<any>([])
     const { bountyId } = params
     const { account } = useWallet();
-    
+
     const fetchSubmissions = async () => {
-        if(account === null) router.push('/')
+        if (account === null) router.push('/')
 
         try {
             const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/get_bounty_by_id/${bountyId}`);
@@ -56,7 +56,7 @@ export default function Bounty({ params }: any) {
             console.error('Error:', error);
             alert('An error occurred while submitting the form');
         }
-        
+
         try {
             const response = await fetch(`https://gigster-backend-ztso.onrender.com/api/get_winners/${bountyId}`);
             if (response.ok) {
@@ -184,14 +184,17 @@ export default function Bounty({ params }: any) {
                                         <ProjectList winnerLength={winnerList.length} bountyId={bountyId} projects={projects} />
                                     </TabPanel>
                                     {
-                                        winnerList.length != 0 && <>
-                                            <TabPanel className="">
-                                                <WinnerList winnerList={winnerList} />
-                                            </TabPanel>
-                                            <TabPanel >
-                                                <DistributeBounty bountyId={bountyId} winnerList={winnerList} />
-                                            </TabPanel>
-                                        </>
+                                        winnerList.length != 0 &&
+                                        <TabPanel className="">
+                                            <WinnerList winnerList={winnerList} />
+                                        </TabPanel>
+                                    }
+                                    {
+                                        winnerList.length != 0 &&
+                                        <TabPanel >
+                                            <DistributeBounty bountyId={bountyId} winnerList={winnerList} />
+                                        </TabPanel>
+
                                     }
                                 </TabPanels>
                             </div>
