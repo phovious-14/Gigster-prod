@@ -110,7 +110,7 @@ export default function Bounty({ params }: any) {
                     <div className="flex justify-center items-start flex-row mt-2">
                         <div className="w-[30%]">
                             <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300">Prizes</p>
-                            <div className="w-full p-2 border-[1px] border-transparent border-r-slate-300">
+                            <div className="w-full p-2 border-[1px] border-transparent border-r-slate-300 h-full">
                                 <div className="flex justify-start items-center gap-2 p-2">
                                     <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={30} height={30} alt="" />
                                     <div>

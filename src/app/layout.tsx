@@ -10,7 +10,9 @@ import { Network } from "aptos";
 import Navbar from '../components/_navbar/Navbar';
 import Footer from '../components/_navbar/Footer';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
-import { UserProvider } from '@/context/UserContext';
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { WalletProvider } from "@/components/WalletProvider";
+import { AutoConnectProvider } from "@/components/AutoConnectProvider";
 
 const wallets = [new PetraWallet()];
 
@@ -32,17 +34,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AppRouterCacheProvider>
-          <AptosWalletAdapterProvider
-            plugins={wallets}
-            autoConnect={false}
-            dappConfig={{ network: Network.TESTNET, aptosConnectDappId: "dapp-id" }}
-          >
-            <UserProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AutoConnectProvider>
+            <WalletProvider>
               <Providers>{children}</Providers>
-            </UserProvider>
-          </AptosWalletAdapterProvider>
-        </AppRouterCacheProvider>
+            </WalletProvider>
+          </AutoConnectProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
