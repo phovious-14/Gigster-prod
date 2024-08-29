@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { Network, Provider } from "aptos";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import DistributeBounty from "@/components/_bounty/DistributeBounty";
-import WinnerList from "@/components/winner_list/winnerList";
+import WinnerList from "@/components/winner_list/WinnerList";
 
 export default function Bounty({ params }: any) {
 
