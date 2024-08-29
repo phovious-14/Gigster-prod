@@ -1,15 +1,13 @@
 "use client"
 
-import { useUser } from "@/context/UserContext";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { formatDateToDDMMYYYYHM } from "../formatDateToDDMMYYYYHM/formatDateToDDMMYYYYHM";
 
-export default function Bounty({ bounties }: any) {
+export default function Bounty({ bounties, userType }: any) {
 
-    const { userType }: any = useUser();
     const { account } = useWallet()
     console.log(bounties);
 

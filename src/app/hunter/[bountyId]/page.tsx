@@ -32,6 +32,7 @@ export default function Bounty({ params }: any) {
     const { bountyId } = params
 
     const [formData, setFormData] = useState<any>({
+        title: '',
         submissionLink: '',
         twitterLink: '',
         anythingElse: '',
@@ -225,6 +226,10 @@ export default function Bounty({ params }: any) {
                     <ModalHeader>Bounty Submission</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
+                        <FormControl isRequired className="mt-4">
+                            <FormLabel style={{ fontSize: '17px' }}>Your Gig Title </FormLabel>
+                            <Input style={{ fontSize: '14px' }} placeholder='Your Gig Title' name="title" value={formData.title} onChange={handleChange} />
+                        </FormControl>
                         <FormControl isRequired className="mt-4">
                             <FormLabel style={{ fontSize: '17px' }}>Link To Your Submission </FormLabel>
                             <span className="text-slate-400 text-sm">Make sure this link is accessible by everyone!</span>

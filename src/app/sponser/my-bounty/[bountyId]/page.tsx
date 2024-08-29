@@ -8,22 +8,25 @@ import ProjectList from "@/components/_projects/ProjectList";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
 import { InputTransactionData, useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { Network, Provider } from "aptos";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import DistributeBounty from "@/components/_bounty/DistributeBounty";
+import WinnerList from "@/components/winner_list/winnerList";
 
 export default function Bounty({ params }: any) {
 
     const { userType }: any = useUser();
     const [bounty, setBounty] = useState<any>([])
+    const router = useRouter()
     const [projects, setProjects] = useState<any>([])
+    const [winnerList, setWinnerList] = useState<any>([])
     const { bountyId } = params
-    const { account, signAndSubmitTransaction } = useWallet();
+    const { account } = useWallet();
     
     const fetchSubmissions = async () => {
-        // if(account === null) return
-        // aptsend()
+        if(account === null) router.push('/')
+
         try {
             const response = await fetch(`http://localhost:4000/api/get_bounty_by_id/${bountyId}`);
             if (response.ok) {
@@ -52,6 +55,20 @@ export default function Bounty({ params }: any) {
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while submitting the form');
+        }
+        
+        try {
+            const response = await fetch(`http://localhost:4000/api/get_winners/${bountyId}`);
+            if (response.ok) {
+                const data: any = await response.json()
+
+                setWinnerList(data)
+            } else {
+                alert('Failed to fetch winners');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while fetching winners');
         }
     }
 
@@ -136,6 +153,7 @@ export default function Bounty({ params }: any) {
                                 <TabList className="border-[1px] border-transparent border-b-slate-300 w-full p-2">
                                     <Tab>Details</Tab>
                                     <Tab>Submissions</Tab>
+                                    {winnerList.length != 0 && <Tab>Announced Winners</Tab>}
                                     <Tab>Rewards Distribution</Tab>
                                 </TabList>
                                 <TabIndicator mt='55px' height='2px' bg='blue.500' borderRadius='1px' />
@@ -159,10 +177,13 @@ export default function Bounty({ params }: any) {
                                         </div>
                                     </TabPanel>
                                     <TabPanel className="">
-                                        <ProjectList projects={projects} />
+                                        <ProjectList winnerLength={winnerList.length} bountyId={bountyId} projects={projects} />
                                     </TabPanel>
+                                    {
+                                        winnerList.length != 0 && <TabPanel className=""><WinnerList winnerList={winnerList} /></TabPanel>
+                                    }
                                     <TabPanel >
-                                        <DistributeBounty />
+                                        <DistributeBounty bountyId={bountyId} winnerList={winnerList} />
                                     </TabPanel>
                                 </TabPanels>
                             </div>

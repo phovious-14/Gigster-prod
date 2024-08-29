@@ -53,7 +53,7 @@ export default function BecomeHunter() {
 
             setLoading(true)
             formData.walletAddress = account?.address
-            const response = await fetch('http://localhost:4000/api/create_hunter_profile', {
+            const response = await fetch(`http://localhost:4000/api/create_hunter_profile`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

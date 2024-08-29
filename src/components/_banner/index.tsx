@@ -31,7 +31,6 @@ const Banner = () => {
       console.error('Error:', error);
       alert('An error occurred while submitting the form');
     }
-    
   }
 
   useEffect(() => {
@@ -40,8 +39,14 @@ const Banner = () => {
 
   return (
     <section className="px-2 py-20 bg-white md:px-0">
+      <div className='w-[400px] h-[400px] fixed top-[150px] -left-[200px] bg-slate-900 rotate-45 flex justify-end items-center flex-row'>
+      <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724917106/white_gigster_logo_bg_rm_odpfxf.png'} className='-rotate-45 -mt-[180px] mr-12' alt="" width={140} height={140} />
+      </div>
+      <div className='w-[400px] h-[400px] fixed top-[150px] -right-[200px] bg-slate-900 rotate-45 flex justify-start items-center flex-row'>
+        <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724916905/White_MoveClub_bg_rm_fgm34e.png'} className='-rotate-45 mt-32 ml-12' alt="" width={120} height={120} />
+      </div>
       <div className="container items-center max-w-6xl px-8 mx-auto xl:px-5">
-        <div className="flex flex-wrap justify-center items-start sm:-mx-3">
+        <div className="flex flex-wrap justify-center items-center sm:-mx-3">
           <div className="w-full md:w-1/2 md:px-3">
             <div className="w-full pb-6 space-y-6 font  sm:max-w-md lg:max-w-lg md:space-y-4 lg:space-y-8 xl:space-y-9 sm:pr-5 lg:pr-0 md:pb-0">
               <h1 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-5xl lg:text-5xl xl:text-5xl">
@@ -49,8 +54,8 @@ const Banner = () => {
                   Unlock Your{' '}
                   <span className="w-full text-transparent bg-clip-text bg-gradient-to-r from-black via-blue-700 to-blue-900 lg:inline">
                     Potential
-                  </span>{' '}
-                  in the Aptos Universe
+                  </span>{' '}in the Aptos Universe
+                  
                 </span>
               </h1>
               <p className="mx-auto text-base text-gray-500 sm:max-w-md font-mono lg:text-xl md:max-w-3xl">
@@ -107,42 +112,6 @@ const Banner = () => {
                     <polyline points="12 5 19 12 12 19" />
                   </svg>
                 </Link>
-              </div>
-            </div>
-          </div>
-          <div className="w-full md:w-1/2">
-            <div className="w-full flex justify-start items-center flex-col h-[calc(100%_-100px)] overflow-x-hidden p-1 overflow-y-auto container2">
-              <div className="bg-[#ffffff] w-full flex justify-start items-start flex-row p-3 rounded-lg shadow-md m-1">
-                <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={50} height={50} alt="" />
-                <div className="flex justify-center items-start flex-col ml-4">
-                  <h1 className="text-slate-800 text-base">Bounty name</h1>
-                  <div className="flex mt-1 ml-4 text-base text-gray-500 font-extralight">
-                    <div className="text-slate-400 text-sm flex -ml-5">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="22px" height="22px" viewBox="0 0 24 24"><path fill="#94A3B8" d="M12 11q.825 0 1.413-.587T14 9t-.587-1.412T12 7t-1.412.588T10 9t.588 1.413T12 11m-3.615 9v-1H11.5v-3.754q-1.321-.236-2.312-1.105T7.823 11.99q-1.586-.187-2.705-1.301T4 8V7q0-.402.299-.701T5 6h2.654V4h8.692v2H19q.402 0 .701.299T20 7v1q0 1.573-1.118 2.688t-2.705 1.3q-.373 1.285-1.364 2.153T12.5 15.246V19h3.115v1zm-.731-9.084V7H5v1q0 1.142.762 1.963t1.892.953M12 14.269q1.385 0 2.346-.961q.962-.962.962-2.347V5H8.692v5.962q0 1.384.962 2.346q.961.961 2.346.961m4.346-3.354q1.131-.132 1.892-.952T19 8V7h-2.654zM12 9.636" /></svg>
-                      <span className="ml-1">Bounty</span>
-                    </div>
-                    <div className="text-slate-400 ml-2">|</div>
-                    <div className="text-slate-400 text-sm flex ml-2 mt-[2px]">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><path fill="#94A3B8" d="M11.5 3a9.5 9.5 0 0 1 9.5 9.5a9.5 9.5 0 0 1-9.5 9.5A9.5 9.5 0 0 1 2 12.5A9.5 9.5 0 0 1 11.5 3m0 1A8.5 8.5 0 0 0 3 12.5a8.5 8.5 0 0 0 8.5 8.5a8.5 8.5 0 0 0 8.5-8.5A8.5 8.5 0 0 0 11.5 4M11 7h1v5.42l4.7 2.71l-.5.87l-5.2-3z" /></svg>
-                      <span className="ml-1">3 day left</span>
-                    </div>
-                    <div className="text-slate-400 ml-2">|</div>
-                    <div className="text-slate-400 text-sm flex ml-3 mt-[2px] justify-start items-center">
-                      <div className="bg-green-400 w-2 h-2 rounded-full pulse-green"></div>
-                      <span className="ml-2">Live</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-evenly gap-4 items-center text-sm text-gray-500 font-light mt-2">
-                    <span>🥇 50 APT</span>
-                    <span>🥈 30 APT</span>
-                    <span>🥉 20 APT</span>
-                  </div>
-                </div>
-                <div className="flex justify-end flex-row items-center flex-grow ">
-                  <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={20} height={20} alt="" />
-                  <span className="text-lg text-slate-800 ml-4 mr-2">100</span>
-                  <span className="text-slate-400 text-base"> APT</span>
-                </div>
               </div>
             </div>
           </div>

@@ -30,7 +30,7 @@ const Navbar = () => {
               </Link>
             </nav>
           </div>
-          <WalletSelector />
+          <WalletSelector  />
         </div>
       </section>
     </>

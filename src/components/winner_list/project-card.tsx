@@ -5,20 +5,10 @@ import { StarIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { Code } from '@chakra-ui/react';
 import Link from 'next/link';
 
-const ProjectCard = ({ item, index, onSelectWinner }: any) => {
-  const [winnerRank, setWinnerRank] = useState<number | null>(null);
+const ProjectCard = ({ item, index }: any) => {
 
   const openInNewTab = (url: string) => {
     window.open(url, '_blank', 'noreferrer');
-  };
-
-  const handleWinnerSelection = () => {
-    if (winnerRank === null && typeof onSelectWinner === 'function') {
-      const newRank = onSelectWinner(index);
-      if (newRank) {
-        setWinnerRank(newRank);
-      }
-    }
   };
 
   return (
@@ -26,18 +16,15 @@ const ProjectCard = ({ item, index, onSelectWinner }: any) => {
       <div className="px-3">
         <div className='flex w-full justify-end items-center flex-row'>
           <button 
-            className={`flex gap-4 p-1 px-2 rounded-md ${
-              winnerRank ? 'bg-yellow-200' : 'bg-slate-200'
-            }`}
-            onClick={handleWinnerSelection}
+            className={`flex gap-4 p-1 px-2 rounded-md bg-yellow-200`}
           >
-            <StarIcon className={`h-4 w-4 ${winnerRank ? 'text-yellow-500' : 'text-lightgray'}`} />
+            <StarIcon className={`h-4 w-4 text-yellow-500`} />
             <h3 className="text-red text-sm font-medium font-mono -ml-2">
-              {winnerRank ? `${winnerRank}${getOrdinalSuffix(winnerRank)}` : ''}
+              {item?.rank}
             </h3>
           </button>
         </div>
-        <h4 className="text-2xl font-bold pt-6 text-black">{item?.title}</h4>
+        <h4 className="text-2xl font-bold pt-6 text-black">{item?.submissionTitle}</h4>
         <div>
         <h3 className="text-base font-normal pt-1 opacity-75 font-mono">{item.walletAddress}</h3>
         </div>
@@ -46,10 +33,10 @@ const ProjectCard = ({ item, index, onSelectWinner }: any) => {
             {/* image */}
           </div>
         </div>
-        <h3 className="mb-2">Submitted At: {item.submittedAt}</h3>
+        <h3 className="mb-2">Submitted At: {item?.submittedAt}</h3>
         <Code>by {item.submittedBy}</Code> <br />
         <hr style={{ color: '#C4C4C4' }} />
-        <div className="relative rounded-3xl cursor-pointer py-4" onClick={() => openInNewTab('www.google.com')}>
+        <div className="relative rounded-3xl cursor-pointer py-4" onClick={() => openInNewTab(item?.submissionLink)}>
           <div className="flex items-center justify-center bg-slate-800  rounded-lg p-1">
             <h3 className="flex cursor-pointer gap-2 items-center text-white text-center text-sm font-medium">
               <p>View</p> <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
