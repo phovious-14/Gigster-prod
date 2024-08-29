@@ -78,7 +78,7 @@ export default function Bounty({ params }: any) {
 
     return (
         <>
-            <div className="flex justify-start items-center flex-col w-screen">
+            <div className="flex mt-24 justify-start items-center flex-col w-screen">
                 <div className="w-[80%]">
                     <div className="w-full flex justify-start items-start flex-row p-4 rounded-lg shadow-md m-1">
                         <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={50} height={50} alt="" />
@@ -153,8 +153,12 @@ export default function Bounty({ params }: any) {
                                 <TabList className="border-[1px] border-transparent border-b-slate-300 w-full p-2">
                                     <Tab>Details</Tab>
                                     <Tab>Submissions</Tab>
-                                    {winnerList.length != 0 && <Tab>Announced Winners</Tab>}
-                                    <Tab>Rewards Distribution</Tab>
+                                    {
+                                        winnerList.length != 0 && <>
+                                            <Tab>Announced Winners</Tab>
+                                            <Tab>Rewards Distribution</Tab>
+                                        </>
+                                    }
                                 </TabList>
                                 <TabIndicator mt='55px' height='2px' bg='blue.500' borderRadius='1px' />
                                 {/* <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300 w-full">Details</p> */}
@@ -180,11 +184,15 @@ export default function Bounty({ params }: any) {
                                         <ProjectList winnerLength={winnerList.length} bountyId={bountyId} projects={projects} />
                                     </TabPanel>
                                     {
-                                        winnerList.length != 0 && <TabPanel className=""><WinnerList winnerList={winnerList} /></TabPanel>
+                                        winnerList.length != 0 && <>
+                                            <TabPanel className="">
+                                                <WinnerList winnerList={winnerList} />
+                                            </TabPanel>
+                                            <TabPanel >
+                                                <DistributeBounty bountyId={bountyId} winnerList={winnerList} />
+                                            </TabPanel>
+                                        </>
                                     }
-                                    <TabPanel >
-                                        <DistributeBounty bountyId={bountyId} winnerList={winnerList} />
-                                    </TabPanel>
                                 </TabPanels>
                             </div>
                         </Tabs>

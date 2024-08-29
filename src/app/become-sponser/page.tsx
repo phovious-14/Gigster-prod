@@ -74,7 +74,7 @@ console.log("account ", account);
     return (
         <>
             <Navbar />
-            <div className="w-full flex justify-center items-center">
+            <div className="w-full mt-24 flex justify-center items-center">
                 <div className="w-[600px] flex justify-center items-center flex-col rounded-xl">
                     <span className="text-slate-800 text-xl font-bold text-center p-2">Welcome to Move club</span>
                     <form onSubmit={handleSubmit} className="flex justify-center items-start flex-col shadow-md mt-4 w-full p-6">

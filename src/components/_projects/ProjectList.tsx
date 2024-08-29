@@ -23,7 +23,7 @@ const WinnerList = ({ bountyId, winners, projects, handleRepick }: any) => {
               winner1SubmissionId: projects[0]._id,
               winner2SubmissionId: projects[1]._id,
               winner3SubmissionId: projects[3]._id
-            }),
+            })
         });
         if (response.ok) {
             

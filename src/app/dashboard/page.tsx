@@ -75,7 +75,7 @@ export default function Dashboard() {
     return (
         <>
             {user?.userType === 'hunter' ? <Navbar /> : <Navbar2 />}
-            <div className="w-full h-screen flex justify-center items-center">
+            <div className="w-full mt-24 h-screen flex justify-center items-center">
                 <div className="w-[1290px] h-full flex justify-between items-start flex-row">
                     <div className="w-[65%] h-full border border-transparent border-r-gray-300 pr-4">
                         <div className="flex gap-4">

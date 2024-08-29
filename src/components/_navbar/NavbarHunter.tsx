@@ -19,7 +19,7 @@ import {
 const Navbar = () => {
   return (
     <>
-      <section className="w-full px-8 text-gray-700 bg-white fixed top-0">
+      <section className="w-full px-8 text-gray-700 bg-white fixed top-0 z-10">
         <div className="container flex flex-col flex-wrap items-center justify-between py-5 mx-auto md:flex-row max-w-7xl">
           <div className="relative flex flex-col md:flex-row">
             <Link href="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">

@@ -7,10 +7,6 @@ import Link from 'next/link';
 
 const ProjectCard = ({ item, index }: any) => {
 
-  const openInNewTab = (url: string) => {
-    window.open(url, '_blank', 'noreferrer');
-  };
-
   return (
     <div className="bg-white border m-3 px-3 pt-3 pb-12 w-[45%] rounded-lg">
       <div className="px-3">
@@ -36,13 +32,13 @@ const ProjectCard = ({ item, index }: any) => {
         <h3 className="mb-2">Submitted At: {item?.submittedAt}</h3>
         <Code>by {item.submittedBy}</Code> <br />
         <hr style={{ color: '#C4C4C4' }} />
-        <div className="relative rounded-3xl cursor-pointer py-4" onClick={() => openInNewTab(item?.submissionLink)}>
+        <a className="relative rounded-3xl cursor-pointer py-4" href={item?.submissionLink} target='_blank'>
           <div className="flex items-center justify-center bg-slate-800  rounded-lg p-1">
             <h3 className="flex cursor-pointer gap-2 items-center text-white text-center text-sm font-medium">
               <p>View</p> <ArrowTopRightOnSquareIcon className="h-4 w-4" aria-hidden="true" />
             </h3>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   );

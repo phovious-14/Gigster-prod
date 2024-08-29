@@ -125,7 +125,7 @@ export default function Bounty({ params }: any) {
 
     return (
         <>
-            <div className="flex justify-start items-center flex-col w-screen">
+            <div className="flex mt-24 justify-start items-center flex-col w-screen">
                 <div className="w-[80%]">
                     <div className="w-full flex justify-start items-start flex-row p-4 rounded-lg shadow-md m-1">
                         <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={50} height={50} alt="" />
