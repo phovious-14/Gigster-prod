@@ -2,17 +2,13 @@
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Providers } from './providers';
+// import { Providers } from './providers';
 import './globals.css';
 import { PetraWallet } from "petra-plugin-wallet-adapter";
-import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
-import { Network } from "aptos";
-import Navbar from '../components/_navbar/Navbar';
-import Footer from '../components/_navbar/Footer';
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { WalletProvider } from "@/components/WalletProvider";
 import { AutoConnectProvider } from "@/components/AutoConnectProvider";
+import { Toaster } from '@/components/ui/toaster';
 
 const wallets = [new PetraWallet()];
 
@@ -34,18 +30,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider
+        {/* <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+        > */}
           <AutoConnectProvider>
             <WalletProvider>
-              <Providers>{children}</Providers>
+              {/* <Providers> */}
+                <div className='bg-white overflow-x-hidden'>{children}</div>
+                <Toaster />
+              {/* </Providers> */}
             </WalletProvider>
           </AutoConnectProvider>
-        </ThemeProvider>
+        {/* </ThemeProvider> */}
       </body>
     </html>
   );

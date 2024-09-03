@@ -1,5 +1,4 @@
-import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Button, useToast } from '@chakra-ui/react'
-import { FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
+
 import Image from 'next/image';
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
@@ -7,6 +6,7 @@ import { InputTransactionData, useWallet } from "@aptos-labs/wallet-adapter-reac
 import { useRouter } from "next/navigation";
 import { Network, Provider } from "aptos";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
+import { useToast } from '../ui/use-toast';
 
 export const provider = new Provider(Network.TESTNET);
 
@@ -17,7 +17,7 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
     const [amt2, setAmt2] = useState<any>("")
     const [amt3, setAmt3] = useState<any>("")
     const [rewardStatus, setRewardStatus] = useState<any>(false)
-    const toast = useToast()
+    const { toast } = useToast()
     const router = useRouter()
     const [transactionInProgress, setTransactionInProgress] = useState<boolean>(false);
 
@@ -61,10 +61,7 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
 
                 //alert
                 toast({
-                    title: 'All transactions have been successfully sent! ✔️',
-                    status: 'success',
-                    duration: 2000,
-                    isClosable: true,
+                    title: 'All transactions have been successfully sent! ✔️'
                 })
             }
 
@@ -106,30 +103,27 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
                     : <div className="flex justify-center items-center flex-col w-[90%] p-4 rounded-lg m-auto shadow-md">
                         <div className="flex justify-center gap-4 items-start flex-row w-full m-4">
                             <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724739104/Untitled_design_6_pl8foc.png'} alt="" width={30} height={30} />
-
-                            <FormControl className="">
-                                <FormLabel style={{ fontSize: '15px' }}>{winnerList[0]?.submissionTitle}</FormLabel>
+                            <div className="flex flex-col w-full mr-2 mt-4">
+                                <label className="text-base text-slate-700 mb-2 ml-1">{winnerList[0]?.submissionTitle}</label>
                                 <span className='text-sm text-slate-400'>{winnerList[0]?.walletAddress}</span>
-                                <Input style={{ fontSize: '14px' }} placeholder='APT Amount' onChange={(e: any) => setAmt1(e.target.value)} />
-                            </FormControl>
+                                <input placeholder='APT Amount' onChange={(e: any) => setAmt1(e.target.value)} type="text" className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]" required />
+                            </div>
                         </div>
                         <div className="flex justify-center gap-4 items-start flex-row w-full m-4">
                             <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724739104/Untitled_design_7_ycdoan.png'} alt="" width={30} height={30} />
-
-                            <FormControl className="">
-                                <FormLabel style={{ fontSize: '15px' }}>{winnerList[1]?.submissionTitle}</FormLabel>
-                                <span className='text-sm text-slate-400'>{winnerList[1]?.walletAddress}</span>
-                                <Input style={{ fontSize: '14px' }} placeholder='APT Amount' onChange={(e: any) => setAmt2(e.target.value)} />
-                            </FormControl>
+                            <div className="flex flex-col w-full mr-2 mt-4">
+                                <label className="text-base text-slate-700 mb-2 ml-1">{winnerList[1]?.submissionTitle}</label>
+                                <span className='text-sm text-slate-400'>{winnerList[0]?.walletAddress}</span>
+                                <input placeholder='APT Amount' onChange={(e: any) => setAmt2(e.target.value)} type="text" className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]" required />
+                            </div>
                         </div>
                         <div className="flex justify-center gap-4 items-start flex-row w-full m-4">
                             <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724739104/Untitled_design_8_xgqct9.png'} alt="" width={30} height={30} />
-
-                            <FormControl className="">
-                                <FormLabel style={{ fontSize: '15px' }}>{winnerList[2]?.submissionTitle}</FormLabel>
-                                <span className='text-sm text-slate-400'>{winnerList[2]?.walletAddress}</span>
-                                <Input style={{ fontSize: '14px' }} placeholder='APT Amount' onChange={(e: any) => setAmt3(e.target.value)} />
-                            </FormControl>
+                            <div className="flex flex-col w-full mr-2 mt-4">
+                                <label className="text-base text-slate-700 mb-2 ml-1">{winnerList[1]?.submissionTitle}</label>
+                                <span className='text-sm text-slate-400'>{winnerList[0]?.walletAddress}</span>
+                                <input placeholder='APT Amount' onChange={(e: any) => setAmt3(e.target.value)} type="text" className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]" required />
+                            </div>
                         </div>
 
                         <button className="relative rounded-3xl cursor-pointer py-4 w-[100%]" onClick={aptsend}>

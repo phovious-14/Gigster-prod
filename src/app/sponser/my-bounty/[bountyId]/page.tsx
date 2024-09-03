@@ -1,9 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Button } from '@chakra-ui/react'
 import ProjectCard from "@/components/_projects/project-card";
-import { FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
 import ProjectList from "@/components/_projects/ProjectList";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
@@ -13,6 +11,13 @@ import { Network, Provider } from "aptos";
 import "@aptos-labs/wallet-adapter-ant-design/dist/index.css";
 import DistributeBounty from "@/components/_bounty/DistributeBounty";
 import WinnerList from "@/components/winner_list/WinnerList";
+
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"
 
 export default function Bounty({ params }: any) {
 
@@ -146,60 +151,53 @@ export default function Bounty({ params }: any) {
                                 {/* <button className="w-full bg-slate-800 text-white p-2 rounded-lg mt-4">See submissions</button> */}
                             </div>
                         </div>
-                        <Tabs position='relative' variant='unstyled'>
 
-                            <div className="w-[850px] flex justify-start items-start flex-col">
 
-                                <TabList className="border-[1px] border-transparent border-b-slate-300 w-full p-2">
-                                    <Tab>Details</Tab>
-                                    <Tab>Submissions</Tab>
-                                    {
-                                        winnerList.length != 0 && <>
-                                            <Tab>Announced Winners</Tab>
-                                            <Tab>Rewards Distribution</Tab>
-                                        </>
-                                    }
-                                </TabList>
-                                <TabIndicator mt='55px' height='2px' bg='blue.500' borderRadius='1px' />
-                                {/* <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300 w-full">Details</p> */}
+                        <Tabs defaultValue="account" className="w-[850px] flex justify-start items-start flex-col mt-2 ml-2">
+                            <TabsList>
+                                <TabsTrigger value="details">Details</TabsTrigger>
+                                <TabsTrigger value="submission">Submission</TabsTrigger>
+                                {
+                                    winnerList.length != 0 && <>
+                                        <TabsTrigger value="winner_announce">Winner Announcement</TabsTrigger>
+                                        <TabsTrigger value="reward_distribute">Rewards Distribution</TabsTrigger>
+                                    </>
+                                }
+                            </TabsList>
+                            <TabsContent value="details">
+                                <div className="flex justify-center items-start flex-col w-full p-6">
+                                    <p className="font-bold text-xl text-slate-700">About Gig</p>
+                                    <p className="mt-4 mb-6 text-slate-500">{bounty?.about}</p>
+                                    <p className="font-bold text-xl text-slate-700">Developer Instructions</p>
+                                    <p className="mt-4 mb-6 text-slate-500">{bounty?.devInstructions}</p>
+                                    <p className="font-bold text-xl text-slate-700">Judging Criteria</p>
+                                    <p className="mt-4 mb-6 text-slate-500">{bounty?.judgingCriteria}</p>
+                                    <p className="font-bold text-xl text-slate-700">Rewards</p>
+                                    <p className="mt-4 mb-6 text-slate-500">{bounty?.rewardDistribution}</p>
+                                    <p className="font-bold text-xl text-slate-700">Submission Requirements</p>
+                                    <p className="mt-4 mb-6 text-slate-500">{bounty?.submissionRequirement}</p>
+                                    <p className="font-bold text-xl text-slate-700">Resources</p>
+                                    <p className="mt-4 mb-6 text-slate-500">{bounty?.resources}</p>
+                                </div>
+                            </TabsContent>
+                            <TabsContent value="submission">
+                                <ProjectList winnerLength={winnerList.length} bountyId={bountyId} projects={projects} />
+                            </TabsContent>
+                            {
+                                winnerList.length != 0 &&
+                                <TabsContent value="winner_announce">
+                                    <WinnerList winnerList={winnerList} />
+                                </TabsContent>
+                            }
+                            {
+                                winnerList.length != 0 &&
+                                <TabsContent value="reward_distribute">
+                                    <DistributeBounty bountyId={bountyId} winnerList={winnerList} />
+                                </TabsContent>
 
-                                <TabPanels className="w-full">
-                                    <TabPanel className="w-full">
-                                        <div className="flex justify-center items-start flex-col w-full p-6">
-                                            <p className="font-bold text-xl text-slate-700">About Gig</p>
-                                            <p className="mt-4 mb-6 text-slate-500">{bounty?.about}</p>
-                                            <p className="font-bold text-xl text-slate-700">Developer Instructions</p>
-                                            <p className="mt-4 mb-6 text-slate-500">{bounty?.devInstructions}</p>
-                                            <p className="font-bold text-xl text-slate-700">Judging Criteria</p>
-                                            <p className="mt-4 mb-6 text-slate-500">{bounty?.judgingCriteria}</p>
-                                            <p className="font-bold text-xl text-slate-700">Rewards</p>
-                                            <p className="mt-4 mb-6 text-slate-500">{bounty?.rewardDistribution}</p>
-                                            <p className="font-bold text-xl text-slate-700">Submission Requirements</p>
-                                            <p className="mt-4 mb-6 text-slate-500">{bounty?.submissionRequirement}</p>
-                                            <p className="font-bold text-xl text-slate-700">Resources</p>
-                                            <p className="mt-4 mb-6 text-slate-500">{bounty?.resources}</p>
-                                        </div>
-                                    </TabPanel>
-                                    <TabPanel className="">
-                                        <ProjectList winnerLength={winnerList.length} bountyId={bountyId} projects={projects} />
-                                    </TabPanel>
-                                    {
-                                        winnerList.length != 0 &&
-                                        <TabPanel className="">
-                                            <WinnerList winnerList={winnerList} />
-                                        </TabPanel>
-                                    }
-                                    {
-                                        winnerList.length != 0 &&
-                                        <TabPanel >
-                                            <DistributeBounty bountyId={bountyId} winnerList={winnerList} />
-                                        </TabPanel>
-
-                                    }
-                                </TabPanels>
-                            </div>
+                            }
                         </Tabs>
-                    </div>
+                   </div>
                 </div>
             </div>
         </>

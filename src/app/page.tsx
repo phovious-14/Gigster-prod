@@ -7,11 +7,11 @@ import FeaturedGigs from "@/components/_banner/FeaturedGigs";
 
 export default function Home() {
   return (
-    <main>
+    <main className="bg-white">
       <Navbar />
       <Banner />
       <FeaturedGigs />
-      <FAQs />
+      {/* <FAQs /> */}
       <Footer />
     </main>
   );

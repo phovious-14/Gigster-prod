@@ -6,7 +6,7 @@ import Navbar from "@/components/_navbar/NavbarHunter";
 import Navbar2 from "@/components/_navbar/NavbarSponser";
 import { useUser } from "@/context/UserContext";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
-import { useToast } from "@chakra-ui/react";
+// import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState<Boolean>(false)
   const [user, setUser] = useState<any>('')
   const router = useRouter()
-  const toast = useToast()
+//   const toast = useToast()
 
   const fetchBounties = async () => {
 
@@ -29,12 +29,12 @@ export default function Dashboard() {
         if (response.ok) {
             const data: any = await response.json() 
             if(data.userType === '') {
-                toast({
-                    title: 'Kindly create profile',
-                    status: 'info',
-                    duration: 2000,
-                    isClosable: true,
-                })
+                // toast({
+                //     title: 'Kindly create profile',
+                //     status: 'info',
+                //     duration: 2000,
+                //     isClosable: true,
+                // })
                 router.push('/')
             }
 
@@ -68,7 +68,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchBounties()
-  }, [account])
+  }, [account?.address])
 
   if(!account) return;
 

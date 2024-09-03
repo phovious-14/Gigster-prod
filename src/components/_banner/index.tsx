@@ -1,5 +1,4 @@
 'use client';
-import { useUser } from '@/context/UserContext';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import Image from 'next/image';
 import Link from 'next/link';

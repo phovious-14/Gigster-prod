@@ -8,9 +8,9 @@ import { WalletSelector } from '../WalletSelector';
 const Navbar = () => {
   return (
     <>
-      <section className="w-full px-8 text-gray-700 bg-white fixed top-0 z-10">
-        <div className="container flex flex-col flex-wrap items-center justify-between py-5 mx-auto md:flex-row max-w-7xl">
-          <div className="relative flex flex-col md:flex-row">
+    <section className="w-full px-8 text-gray-700 bg-white fixed -top-3 z-10">
+      <div className="container flex flex-row flex-wrap items-center justify-between py-5 mx-auto md:flex-row max-w-7xl">
+        <div className="relative flex flex-row md:flex-row">
             <Link href="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
               <span className="mx-auto text-xl font-black leading-none text-gray-900 select-none">
                 <Image src={'https://res.cloudinary.com/dm6aa7jlg/image/upload/v1724954954/Twitter_profile_gigster_ymobek.png'} alt='' height={50} width={50} />
@@ -25,6 +25,10 @@ const Navbar = () => {
               <a href="#feature-gigs" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Feature Gigs
               </a>
+
+              <Link href="/swap" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                Swap
+              </Link>
               {/* <a href="#" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Contibutor
               </a> */}

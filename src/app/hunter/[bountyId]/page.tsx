@@ -1,35 +1,48 @@
 "use client"
 
 import Image from "next/image";
+// import {
+//     Modal,
+//     ModalOverlay,
+//     ModalContent,
+//     ModalHeader,
+//     ModalFooter,
+//     ModalBody,
+//     ModalCloseButton,
+//     useDisclosure,
+//     Button,
+//     FormControl,
+//     FormLabel,
+//     Input,
+//     useToast,
+// } from '@chakra-ui/react';
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    useDisclosure,
-    Button,
-    FormControl,
-    FormLabel,
-    Input,
-    useToast,
-} from '@chakra-ui/react';
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+
 import { useEffect, useRef, useState } from "react";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { formatDateToDDMMYYYYHM } from "@/components/formatDateToDDMMYYYYHM/formatDateToDDMMYYYYHM";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast"
+
 
 export default function Bounty({ params }: any) {
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
     const { account } = useWallet()
     const [bounty, setBounty] = useState<any>([])
     const [isSubmitted, setIsSubmitted] = useState<Boolean>(false)
     const router = useRouter()
     const btnRef = useRef(null)
     const { bountyId } = params
+    const { toast } = useToast()
 
     const [formData, setFormData] = useState<any>({
         title: '',
@@ -37,7 +50,6 @@ export default function Bounty({ params }: any) {
         twitterLink: '',
         anythingElse: ''
     });
-    const toast = useToast()
 
     const handleChange = (e: any) => {
         setFormData({
@@ -53,9 +65,7 @@ export default function Bounty({ params }: any) {
             toast({
                 title: 'Wallet connection required.',
                 description: "You need to connect aptos wallet",
-                status: 'warning',
-                duration: 2000,
-                isClosable: true,
+                variant:"default"
             })
             return
         }
@@ -72,12 +82,8 @@ export default function Bounty({ params }: any) {
             if (response.ok) {
 
                 toast({
-                    title: 'You have submiite project!',
-                    status: 'success',
-                    duration: 2000,
-                    isClosable: true,
+                    title: 'You have submiite project!'
                 })
-                onClose()
                 router.push('/dashboard')
             } else {
                 alert('Failed to create sponsor profile');
@@ -165,20 +171,6 @@ export default function Bounty({ params }: any) {
                                         <span className="text-slate-500 ml-4">Total Prizes</span>
                                     </div>
                                 </div>
-                                {/* <div className="p-2 ml-1">
-                                    <div>
-                                        <span className="text-base text-slate-800">🥇 5000</span>
-                                        <span className="ml-2">APT</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-base text-slate-800">🥈 3000</span>
-                                        <span className="ml-2">APT</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-base text-slate-800">🥉 2000</span>
-                                        <span className="ml-2">APT</span>
-                                    </div>
-                                </div> */}
                                 <div className="flex justify-between items-start flex-row mt-4">
                                     <div className="flex justify-start p-4 items-ceenter flex-col w-[49%] bg-[#f3f6fd] rounded-lg">
                                         <span className="text-sm text-slate-600">Total Submissions</span>
@@ -189,7 +181,47 @@ export default function Bounty({ params }: any) {
                                         <span className="text-slate-800 text-sm font-bold text-center mt-1">{formatDateToDDMMYYYYHM(bounty?.endAt)}</span>
                                     </div>
                                 </div>
-                                {isSubmitted ? <button disabled className="w-full bg-slate-600 text-white p-2 rounded-lg mt-4">Submitted</button> : <button className="w-full bg-slate-800 text-white p-2 rounded-lg mt-4" ref={btnRef} onClick={onOpen}>Submit Now</button>}
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline" style={{ width: "100%", padding: '4px', marginTop:"10px" }}>
+                                            {!isSubmitted ? <button disabled className="w-full bg-slate-600 text-white p-2 rounded-lg">Submitted</button> : <button className="w-full bg-slate-800 text-white p-2 rounded-lg" ref={btnRef}>Submit Now</button>}
+                                        </Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>Bounty Submission</DialogTitle>
+                                            <DialogDescription>
+
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <div>
+                                            <div className="flex flex-col w-full mr-2 mt-4">
+                                                <label className="text-base text-slate-700 mb-2 ml-1">Your Gig Title <span className="text-red-500">*</span></label>
+                                                <input placeholder='Your Gig Title' name="title" value={formData.title} onChange={handleChange} type="text" className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]" required />
+                                            </div>
+                                            <div className="flex flex-col w-full mr-2 mt-4">
+                                                <label className="text-base text-slate-700 ml-1">Link To Your Submission <span className="text-red-500">*</span></label>
+                                                <span className="text-slate-400 text-sm ml-1">Make sure this link is accessible by everyone!</span>
+                                                <input placeholder='Link to your submission' name="submissionLink" value={formData.submissionLink} onChange={handleChange} type="text" className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]" required />
+                                            </div>
+                                            <div className="flex flex-col w-full mr-2 mt-4">
+                                                <label className="text-base text-slate-700 ml-1">Tweet Link <span className="text-red-500">*</span></label>
+                                                <span className="text-slate-400 text-sm ml-1">This helps sponsors discover (and maybe repost) your work on Twitter! If this submission is for a Twitter thread bounty, you can ignore this field.</span>
+                                                <input placeholder='Add a tweet link' name="twitterLink" value={formData.twitterLink} onChange={handleChange} type="text" className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]" required />
+                                            </div>
+                                            <div className="flex flex-col w-full mr-2 mt-4">
+                                                <label className="text-base text-slate-700 ml-1">Anything Else? <span className="text-red-500">*</span></label>
+                                                <span className="text-slate-400 text-sm ml-1">If you have any other links or information you would like to share with us, please add them here!</span>
+                                                <input placeholder='Add info or link' name="anythingElse" value={formData.anythingElse} onChange={handleChange} type="text" className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]" required />
+                                            </div>
+
+                                        </div>
+                                        <DialogFooter>
+                                            <Button type="submit" onClick={handleSubmit}>Submit</Button>
+                                        </DialogFooter>
+                                    </DialogContent>
+                                </Dialog>
+
                             </div>
                         </div>
                         <div className="w-[70%] flex justify-start items-start flex-col">
@@ -212,49 +244,6 @@ export default function Bounty({ params }: any) {
                     </div>
                 </div>
             </div>
-            <Modal
-                onClose={onClose}
-                finalFocusRef={btnRef}
-                isOpen={isOpen}
-                scrollBehavior={'outside'}
-                isCentered
-                size={'xl'}
-            >
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Bounty Submission</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <FormControl isRequired className="mt-4">
-                            <FormLabel style={{ fontSize: '17px' }}>Your Gig Title </FormLabel>
-                            <Input style={{ fontSize: '14px' }} placeholder='Your Gig Title' name="title" value={formData.title} onChange={handleChange} />
-                        </FormControl>
-                        <FormControl isRequired className="mt-4">
-                            <FormLabel style={{ fontSize: '17px' }}>Link To Your Submission </FormLabel>
-                            <span className="text-slate-400 text-sm">Make sure this link is accessible by everyone!</span>
-                            <Input style={{ fontSize: '14px' }} placeholder='Link to your submission' name="submissionLink" value={formData.submissionLink} onChange={handleChange} />
-                        </FormControl>
-                        <FormControl className="mt-4">
-                            <FormLabel style={{ fontSize: '17px' }}>Tweet Link</FormLabel>
-                            <span className="text-slate-400 text-sm">This helps sponsors discover (and maybe repost) your work on Twitter! If this submission is for a Twitter thread bounty, you can ignore this field.</span>
-                            <Input style={{ fontSize: '14px' }} placeholder='Add a tweet link' name="twitterLink" value={formData.twitterLink} onChange={handleChange} />
-                        </FormControl>
-                        <FormControl className="mt-4">
-                            <FormLabel style={{ fontSize: '17px' }}>Anything Else?</FormLabel>
-                            <span className="text-slate-400 text-sm">If you have any other links or information you would like to share with us, please add them here!</span>
-                            <Input style={{ fontSize: '14px' }} placeholder='Add info or link' name="anythingElse" value={formData.anythingElse} onChange={handleChange} />
-                        </FormControl>
-                    </ModalBody>
-                    <ModalFooter>
-                        <ModalFooter>
-                            <Button colorScheme='' style={{ background: '#1e293b' }} mr={3} onClick={handleSubmit}>
-                                Submit
-                            </Button>
-                            <Button onClick={onClose}>Cancel</Button>
-                        </ModalFooter>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
         </>
     )
 }

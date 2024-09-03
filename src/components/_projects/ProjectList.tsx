@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import ProjectCard from './project-card';
-import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
+import { useToast } from '../ui/use-toast';
 
 const WinnerList = ({ bountyId, winners, projects, handleRepick }: any) => {
 
-    const toast = useToast()
+    const {toast} = useToast()
     const router = useRouter()
     const {account} = useWallet()
 
@@ -30,12 +30,9 @@ const WinnerList = ({ bountyId, winners, projects, handleRepick }: any) => {
         if (response.ok) {
             
             toast({
-                title: 'You have announce winners 🎉',
-                status: 'success',
-                duration: 2000,
-                isClosable: true,
+                title: 'You have announce winners 🎉'
             })
-            router.push('/dashboard')
+            setTimeout(() => router.push('/dashboard'), 2000)
         } else {
             alert('Failed to create sponsor profile');
         }
