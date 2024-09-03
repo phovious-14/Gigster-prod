@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { StarIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
-import { Code } from '@chakra-ui/react';
 import Link from 'next/link';
 import { formatDateToDDMMYYYYHM } from '../formatDateToDDMMYYYYHM/formatDateToDDMMYYYYHM';
 
