@@ -184,7 +184,7 @@ export default function Bounty({ params }: any) {
                                 <Dialog>
                                     <DialogTrigger asChild>
                                         <Button variant="outline" style={{ width: "100%", padding: '4px', marginTop:"10px" }}>
-                                            {!isSubmitted ? <button disabled className="w-full bg-slate-600 text-white p-2 rounded-lg">Submitted</button> : <button className="w-full bg-slate-800 text-white p-2 rounded-lg" ref={btnRef}>Submit Now</button>}
+                                            {isSubmitted ? <button disabled className="w-full bg-slate-600 text-white p-2 rounded-lg">Submitted</button> : <button className="w-full bg-slate-800 text-white p-2 rounded-lg" ref={btnRef}>Submit Now</button>}
                                         </Button>
                                     </DialogTrigger>
                                     <DialogContent>
