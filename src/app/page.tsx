@@ -6,6 +6,8 @@ import FeaturedGigs from "@/components/_banner/FeaturedGigs";
 
 
 export default function Home() {
+
+
   return (
     <main className="bg-white">
       <Navbar />
