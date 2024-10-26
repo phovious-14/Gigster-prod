@@ -14,8 +14,7 @@ export const useUserType = (address: string | undefined) => {
     queryFn: () => fetchUserType(address || ''),
     enabled: !!address,
     retry: false,
-    onSuccess: (data) => {
-      console.log('User data received:', data)
+    onSuccess: (data: any) => {
       if (data.userType === '') {
         console.log('No user type, redirecting to home')
         router.push('/')
