@@ -38,7 +38,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/_navbar/Navbar";
 
-export const provider = new Provider(Network.MAINNET);
+const provider = new Provider(Network.MAINNET);
 
 const MODULE_ADDRESS =
   "0xb4c500b5a0beba1a70f41a2479c86e7d611bfaa381403d00971cef13040fb3d3";
