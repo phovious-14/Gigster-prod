@@ -40,6 +40,8 @@ import Navbar from "@/components/_navbar/Navbar";
 
 const provider = new Provider(Network.MAINNET);
 
+const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+
 const MODULE_ADDRESS =
   "0xb4c500b5a0beba1a70f41a2479c86e7d611bfaa381403d00971cef13040fb3d3";
 
@@ -89,7 +91,7 @@ export default function Bounty({ params }: any) {
     try {
       formData.walletAddress = account?.address;
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/create_bounty_submission/${bountyId}/${account?.address}`,
+        `${BASE_URL}/api/create_bounty_submission/${bountyId}/${account?.address}`,
         {
           method: "POST",
           headers: {
@@ -115,7 +117,7 @@ export default function Bounty({ params }: any) {
   const fetchBounty = async () => {
     try {
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/get_bounty_by_id/${bountyId}`
+        `${BASE_URL}/api/get_bounty_by_id/${bountyId}`
       );
       if (response.ok) {
         const data: any = await response.json();
@@ -125,7 +127,7 @@ export default function Bounty({ params }: any) {
       }
 
       const response2 = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/checkBountySubmitted/${bountyId}/${account?.address}`
+        `${BASE_URL}/api/checkBountySubmitted/${bountyId}/${account?.address}`
       );
       if (response2.ok) {
         const data: any = await response2.json();

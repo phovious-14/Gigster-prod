@@ -8,6 +8,8 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
+const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+
 export default function CreateGig() {
   const { account } = useWallet();
   const router = useRouter();
@@ -75,7 +77,7 @@ export default function CreateGig() {
     try {
       formData.walletAddress = account?.address;
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/create_bounty`,
+        `${BASE_URL}/api/create_bounty`,
         {
           method: "POST",
           headers: {

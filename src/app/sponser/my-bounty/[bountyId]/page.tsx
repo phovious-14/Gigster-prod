@@ -26,12 +26,14 @@ export default function Bounty({ params }: any) {
   const { bountyId } = params;
   const { account } = useWallet();
 
+  const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+
   const fetchSubmissions = async () => {
     if (account === null) router.push("/");
 
     try {
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/get_bounty_by_id/${bountyId}`
+        `${BASE_URL}/api/get_bounty_by_id/${bountyId}`
       );
       if (response.ok) {
         const data: any = await response.json();
@@ -48,7 +50,7 @@ export default function Bounty({ params }: any) {
 
     try {
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/get_projectsOf_bounty_by_id/${bountyId}`
+        `${BASE_URL}/api/get_projectsOf_bounty_by_id/${bountyId}`
       );
       if (response.ok) {
         const data: any = await response.json();
@@ -64,7 +66,7 @@ export default function Bounty({ params }: any) {
 
     try {
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/get_winners/${bountyId}`
+        `${BASE_URL}/api/get_winners/${bountyId}`
       );
       if (response.ok) {
         const data: any = await response.json();

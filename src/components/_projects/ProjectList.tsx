@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useToast } from "../ui/use-toast";
 
+const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+
 const WinnerList = ({ bountyId, winners, projects, handleRepick }: any) => {
   const { toast } = useToast();
   const router = useRouter();
@@ -16,7 +18,7 @@ const WinnerList = ({ bountyId, winners, projects, handleRepick }: any) => {
       console.log(projects);
 
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/add_winners/${bountyId}/${account?.address}`,
+        `${BASE_URL}/api/add_winners/${bountyId}/${account?.address}`,
         {
           method: "POST",
           headers: {

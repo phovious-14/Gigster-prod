@@ -10,6 +10,8 @@ import { useState } from "react";
 import "./sty;e.css";
 import { useToast } from "@/components/ui/use-toast";
 
+const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+
 export default function BecomeHunter() {
   const { account } = useWallet();
   const router = useRouter();
@@ -52,7 +54,7 @@ export default function BecomeHunter() {
       setLoading(true);
       formData.walletAddress = account?.address;
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/create_hunter_profile`,
+        `${BASE_URL}/api/create_hunter_profile`,
         {
           method: "POST",
           headers: {

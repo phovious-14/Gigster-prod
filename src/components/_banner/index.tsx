@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+
 const Banner = () => {
   const { account } = useWallet();
   // const { userType, setUserType }: any = useUser();
@@ -15,7 +17,7 @@ const Banner = () => {
 
     try {
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/find_usertype/${account?.address}`
+        `${BASE_URL}/api/find_usertype/${account?.address}`
       );
       if (response.ok) {
         const data = await response.json();

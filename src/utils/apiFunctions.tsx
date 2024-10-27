@@ -1,10 +1,12 @@
 // api.ts
 
+const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+
 export const fetchUserType = async (address: string) => {
   console.log(`Fetching user type for address: ${address}`);
   try {
     const response = await fetch(
-      `https://gigster-backend-ztso.onrender.com/api/find_usertype/${address}`
+      `${BASE_URL}/api/find_usertype/${address}`
     );
     if (!response.ok) {
       const errorText = await response.text();
@@ -28,8 +30,8 @@ export const fetchBounties = async (address: string, userType: string) => {
   );
   const url =
     userType === "sponser"
-      ? `https://gigster-backend-ztso.onrender.com/api/get_sponser_bounties/${address}`
-      : `https://gigster-backend-ztso.onrender.com/api/get_all_bounties`;
+      ? `${BASE_URL}/api/get_sponser_bounties/${address}`
+      : `${BASE_URL}/api/get_all_bounties`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
