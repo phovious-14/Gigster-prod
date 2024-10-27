@@ -9,6 +9,8 @@ import {
   
 
 export default function FAQs() {
+    console.log(process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL);
+    
     return (
         <div id='faqs' className='w-screen h-screen flex justify-center items-center flex-col mt-24'>
             <h1 className='text-3xl text-slate-800 text-center '>FAQs</h1>
