@@ -89,7 +89,7 @@ export default function Bounty({ params }: any) {
     try {
       formData.walletAddress = account?.address;
       const response = await fetch(
-        `http://localhost:4000/api/create_bounty_submission/${bountyId}/${account?.address}`,
+        `https://gigster-backend-ztso.onrender.com/api/create_bounty_submission/${bountyId}/${account?.address}`,
         {
           method: "POST",
           headers: {
@@ -115,7 +115,7 @@ export default function Bounty({ params }: any) {
   const fetchBounty = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4000/api/get_bounty_by_id/${bountyId}`
+        `https://gigster-backend-ztso.onrender.com/api/get_bounty_by_id/${bountyId}`
       );
       if (response.ok) {
         const data: any = await response.json();
@@ -125,7 +125,7 @@ export default function Bounty({ params }: any) {
       }
 
       const response2 = await fetch(
-        `http://localhost:4000/api/checkBountySubmitted/${bountyId}/${account?.address}`
+        `https://gigster-backend-ztso.onrender.com/api/checkBountySubmitted/${bountyId}/${account?.address}`
       );
       if (response2.ok) {
         const data: any = await response2.json();

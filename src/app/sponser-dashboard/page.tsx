@@ -17,10 +17,10 @@ export default function Dashboard() {
   const router = useRouter();
   // const toast = useToast();
 
-  const { userData, isLoading: userLoading } = useUserType(account?.address);
+  const { data: userData } = useUserType(account?.address || "");
   const { data: bountiesData, isLoading: bountiesLoading } = useBounties(
-    account?.address,
-    userData?.userType
+    account?.address || undefined,
+    userData?.userType || undefined
   );
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function Dashboard() {
     }
   }, [userData, router]);
 
-  if (userLoading || bountiesLoading) {
+  if (bountiesLoading) {
     return <Loading />;
   }
 

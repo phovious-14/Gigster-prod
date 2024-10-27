@@ -15,7 +15,7 @@ const Banner = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/find_usertype/${account?.address}`
+        `https://gigster-backend-ztso.onrender.com/api/find_usertype/${account?.address}`
       );
       if (response.ok) {
         const data = await response.json();

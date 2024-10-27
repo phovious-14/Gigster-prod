@@ -16,7 +16,7 @@ const WinnerList = ({ bountyId, winners, projects, handleRepick }: any) => {
       console.log(projects);
 
       const response = await fetch(
-        `http://localhost:4000/api/add_winners/${bountyId}/${account?.address}`,
+        `https://gigster-backend-ztso.onrender.com/api/add_winners/${bountyId}/${account?.address}`,
         {
           method: "POST",
           headers: {
