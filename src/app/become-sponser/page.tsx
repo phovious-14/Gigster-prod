@@ -7,6 +7,8 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
+const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
+
 export default function BecomeSponser() {
   const { account } = useWallet();
   const router = useRouter();
@@ -43,16 +45,13 @@ export default function BecomeSponser() {
 
     try {
       formData.walletAddress = account?.address;
-      const response = await fetch(
-        "https://gigster-backend-ztso.onrender.com/api/create_sponser_profile",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/create_sponser_profile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
       if (response.ok) {
         toast({
           title: "You have become sponser now",

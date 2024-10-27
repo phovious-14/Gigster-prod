@@ -6,16 +6,18 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const Banner = () => {
+  const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
   const { account } = useWallet();
   // const { userType, setUserType }: any = useUser();
   const route = useRouter();
+  console.log(BASE_URL);
 
   const fetchUserType = async () => {
     if (account === null) return;
 
     try {
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/find_usertype/${account?.address}`
+        `${BASE_URL}/api/find_usertype/${account?.address}`
       );
       if (response.ok) {
         const data = await response.json();

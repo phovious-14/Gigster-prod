@@ -25,6 +25,8 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
 
   const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 
+  const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
+
   const aptsend = async () => {
     if (!account) return router.push("/");
     setTransactionInProgress(true);
@@ -57,7 +59,7 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
       // await fetchAccountBalance();
 
       const response2 = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/add_reward_distribution/${bountyId}`,
+        `${BASE_URL}/api/add_reward_distribution/${bountyId}`,
         {
           method: "POST",
           headers: {
@@ -81,7 +83,7 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
   const fetchRewardStatus = async () => {
     try {
       const response = await fetch(
-        `https://gigster-backend-ztso.onrender.com/api/checkRewardDistributed/${bountyId}`
+        `${BASE_URL}/api/checkRewardDistributed/${bountyId}`
       );
       if (response.ok) {
         const data: any = await response.json();
