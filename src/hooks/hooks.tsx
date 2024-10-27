@@ -7,26 +7,18 @@ import { useState, useEffect } from 'react'
 
 export const useUserType = (address: string | undefined) => {
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
 
-  const { data, isLoading, error } = useQuery({
+  return useQuery({
     queryKey: ['userType', address],
     queryFn: () => fetchUserType(address || ''),
-    enabled: !!address,
+    enabled: Boolean(address),
     retry: false,
-    onSuccess: (data: any) => {
-      if (data.userType === '') {
-        console.log('No user type, redirecting to home')
-        router.push('/')
-      } else {
-        console.log('Setting user type:', data.userType)
-        localStorage.setItem('userType', data.userType)
-        setUser(data)
-      }
-    },
+    select: (data: any) => {
+      console.log('Setting user type:', data.userType)
+      localStorage.setItem('userType', data.userType)
+      return data
+    }
   })
-
-  return { userData: user, isLoading, error }
 }
 
 export const useBounties = (address: string | undefined, userType: string | undefined) => {

@@ -5,6 +5,7 @@ import Footer from "@/components/_navbar/Footer";
 import Navbar from "@/components/_navbar/Navbar";
 import Navbar2 from "@/components/_navbar/NavbarSponser";
 import Loading from "@/components/Loading";
+import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@/context/UserContext";
 import { useBounties, useUserType } from "@/hooks/hooks";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
@@ -17,7 +18,7 @@ export default function Dashboard() {
   const router = useRouter();
   // const toast = useToast();
 
-  const { userData, isLoading: userLoading } = useUserType(account?.address || "");  
+  const { data: userData } = useUserType(account?.address || "");  
   const { data: bountiesData, isLoading: bountiesLoading } = useBounties(account?.address || undefined, userData?.userType || undefined);
   // console.log(bountiesData);
   
@@ -29,12 +30,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (userData?.userType === "") {
-      // toast({
-      //   title: 'Kindly create profile',
-      //   status: 'info',
-      //   duration: 2000,
-      //   isClosable: true,
-      // });
+      toast({
+        title: 'Kindly create profile',
+        duration: 2000,
+      });
       router.push("/");
     }
   }, [userData, router]);
