@@ -8,7 +8,7 @@ import { WalletSelector } from '../WalletSelector';
 const Navbar = () => {
   return (
     <>
-    <section className="w-full px-8 text-gray-700 bg-white fixed -top-3 z-10">
+    <section className="w-full text-gray-700 bg-white fixed -top-3 z-10">
       <div className="container flex flex-row flex-wrap items-center justify-between py-5 mx-auto md:flex-row max-w-7xl">
         <div className="relative flex flex-row md:flex-row">
             <Link href="/" className="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
@@ -22,9 +22,13 @@ const Navbar = () => {
                 Home
               </Link>
 
-              <a href="#feature-gigs" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+              <Link href="/bounty" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+                bounty
+              </Link>
+
+              {/* <a href="#feature-gigs" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Feature Gigs
-              </a>
+              </a> */}
 
               <Link href="/swap" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Swap

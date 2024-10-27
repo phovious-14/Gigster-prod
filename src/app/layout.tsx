@@ -9,8 +9,11 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { WalletProvider } from "@/components/WalletProvider";
 import { AutoConnectProvider } from "@/components/AutoConnectProvider";
 import { Toaster } from '@/components/ui/toaster';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const wallets = [new PetraWallet()];
+const queryClient = new QueryClient()
 
 
 const inter = Inter({ subsets: ['latin'] });
@@ -30,6 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+      <QueryClientProvider client={queryClient}>
         {/* <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -44,7 +48,9 @@ export default function RootLayout({
               {/* </Providers> */}
             </WalletProvider>
           </AutoConnectProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         {/* </ThemeProvider> */}
+        </QueryClientProvider>
       </body>
     </html>
   );
