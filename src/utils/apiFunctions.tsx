@@ -24,7 +24,7 @@ export const fetchUserType = async (address: string) => {
 
 export const fetchBounties = async (address: string, userType: string) => {
   console.log(
-    `Fetching bounties for address: ${address}, userType: ${userType}`, `${BASE_URL}/api/find_usertype/${address}`
+    `Fetching bounties for address: ${address}, userType: ${userType}`, `${BASE_URL}/api/find_usertype/${address}`, address
   );
   const url =
     userType === "sponser"
