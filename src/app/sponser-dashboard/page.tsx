@@ -41,7 +41,7 @@ export default function Dashboard() {
     }
   }, [userData, router]);
 
-  if (userLoading || bountiesLoading) {
+  if (bountiesLoading) {
     return <Loading />;
   }
 
