@@ -8,7 +8,7 @@ import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
-const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
 export default function CreateGig() {
   const { account } = useWallet();
@@ -76,16 +76,13 @@ export default function CreateGig() {
 
     try {
       formData.walletAddress = account?.address;
-      const response = await fetch(
-        `${BASE_URL}/api/create_bounty`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/create_bounty`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
       if (response.ok) {
         toast({
           title: "You have created bounty",

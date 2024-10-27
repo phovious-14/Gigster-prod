@@ -1,13 +1,11 @@
 // api.ts
 
-const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
 export const fetchUserType = async (address: string) => {
   console.log(`Fetching user type for address: ${address}`);
   try {
-    const response = await fetch(
-      `${BASE_URL}/api/find_usertype/${address}`
-    );
+    const response = await fetch(`${BASE_URL}/api/find_usertype/${address}`);
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Failed to fetch user type:", response.status, errorText);

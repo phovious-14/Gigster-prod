@@ -25,7 +25,7 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
 
   const APTOS_COIN = "0x1::aptos_coin::AptosCoin";
 
-  const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
   const aptsend = async () => {
     if (!account) return router.push("/");

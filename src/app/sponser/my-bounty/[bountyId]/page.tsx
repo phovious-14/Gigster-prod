@@ -26,7 +26,7 @@ export default function Bounty({ params }: any) {
   const { bountyId } = params;
   const { account } = useWallet();
 
-  const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
   const fetchSubmissions = async () => {
     if (account === null) router.push("/");
@@ -65,9 +65,7 @@ export default function Bounty({ params }: any) {
     }
 
     try {
-      const response = await fetch(
-        `${BASE_URL}/api/get_winners/${bountyId}`
-      );
+      const response = await fetch(`${BASE_URL}/api/get_winners/${bountyId}`);
       if (response.ok) {
         const data: any = await response.json();
 

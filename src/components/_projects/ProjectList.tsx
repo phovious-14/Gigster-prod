@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useToast } from "../ui/use-toast";
 
-const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
 const WinnerList = ({ bountyId, winners, projects, handleRepick }: any) => {
   const { toast } = useToast();

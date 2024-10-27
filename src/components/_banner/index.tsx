@@ -5,12 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
-
 const Banner = () => {
+  const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
   const { account } = useWallet();
   // const { userType, setUserType }: any = useUser();
   const route = useRouter();
+  console.log(BASE_URL);
 
   const fetchUserType = async () => {
     if (account === null) return;

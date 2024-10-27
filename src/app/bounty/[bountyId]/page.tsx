@@ -40,7 +40,7 @@ import Navbar from "@/components/_navbar/Navbar";
 
 const provider = new Provider(Network.MAINNET);
 
-const BASE_URL = process.env.NEXT_GIGSTER_BACKEND_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
 const MODULE_ADDRESS =
   "0xb4c500b5a0beba1a70f41a2479c86e7d611bfaa381403d00971cef13040fb3d3";

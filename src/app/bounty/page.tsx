@@ -20,7 +20,7 @@ export default function Dashboard() {
 
   const { data: userData } = useUserType(account?.address || "");  
   const { data: bountiesData, isLoading: bountiesLoading } = useBounties(account?.address || undefined, userData?.userType || undefined);
-  // console.log(bountiesData);
+  console.log(bountiesData);
   
   // useEffect(() => {
   //   if (!account) {

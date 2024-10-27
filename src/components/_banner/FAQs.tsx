@@ -9,11 +9,9 @@ import {
   
 
 export default function FAQs() {
-    const version = process.env.NEXT_PUBLIC_ENVIRONMENT === "testing" ? "testing" : "production"
     return (
         <div id='faqs' className='w-screen h-screen flex justify-center items-center flex-col mt-24'>
-            
-            <h1 className='text-3xl text-slate-800 text-center '>FAQs {version}</h1>
+            <h1 className='text-3xl text-slate-800 text-center '>FAQs</h1>
             <div className='w-[60%] h-full mt-16'>
             <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">

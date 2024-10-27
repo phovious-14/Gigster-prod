@@ -27,7 +27,7 @@ export default function Bounty({ bounties, userType }: any) {
     return (
         <div className="w-full flex justify-start items-center flex-col h-[calc(100%_-100px)] overflow-x-hidden p-1 overflow-y-auto container2">
             {
-                bounties.length !== 0 && bounties?.map((item: any, index: any) => {
+                bounties?.length !== 0 && bounties?.map((item: any, index: any) => {
                     const startDate = new Date(item.startAt);
                     const endDate = new Date(item.endAt);
                     let status = "";
