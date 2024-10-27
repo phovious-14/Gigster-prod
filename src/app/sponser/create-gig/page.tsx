@@ -74,13 +74,16 @@ export default function CreateGig() {
 
     try {
       formData.walletAddress = account?.address;
-      const response = await fetch(`http://localhost:4000/api/create_bounty`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `https://gigster-backend-ztso.onrender.com/api/create_bounty`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       if (response.ok) {
         toast({
           title: "You have created bounty",

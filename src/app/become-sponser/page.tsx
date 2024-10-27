@@ -44,7 +44,7 @@ export default function BecomeSponser() {
     try {
       formData.walletAddress = account?.address;
       const response = await fetch(
-        "http://localhost:4000/api/create_sponser_profile",
+        "https://gigster-backend-ztso.onrender.com/api/create_sponser_profile",
         {
           method: "POST",
           headers: {
