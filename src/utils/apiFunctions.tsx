@@ -3,7 +3,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
 export const fetchUserType = async (address: string) => {
-  console.log(`Fetching user type for address: ${address}`);
+  console.log(`Fetching user type for address: ${address}`, `${BASE_URL}/api/find_usertype/${address}`);
   try {
     const response = await fetch(`${BASE_URL}/api/find_usertype/${address}`);
     if (!response.ok) {
@@ -24,7 +24,7 @@ export const fetchUserType = async (address: string) => {
 
 export const fetchBounties = async (address: string, userType: string) => {
   console.log(
-    `Fetching bounties for address: ${address}, userType: ${userType}`
+    `Fetching bounties for address: ${address}, userType: ${userType}`, `${BASE_URL}/api/find_usertype/${address}`
   );
   const url =
     userType === "sponser"
