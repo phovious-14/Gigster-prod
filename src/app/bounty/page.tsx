@@ -32,7 +32,7 @@ export default function Dashboard() {
     if (userData?.userType === "") {
       toast({
         title: 'Kindly create profile',
-        duration: 2000,
+        duration: 3000,
       });
       router.push("/");
     }
