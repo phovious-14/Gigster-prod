@@ -17,10 +17,18 @@ import WinnerList from "@/components/winner_list/WinnerList";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import remarkParse from "remark-parse";
-import remarkStringify from "remark-stringify";
-import { markdownConfig } from "../../create-gig/page";
+import remarkStringify, { Options } from "remark-stringify";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+
+const markdownConfig: Options = {
+  bullet: "*",
+  bulletOther: "-",
+  bulletOrdered: ".",
+  closeAtx: false,
+  emphasis: "*",
+  fence: "`",
+};
 
 export default function Bounty({ params }: any) {
   const { userType }: any = useUser();
