@@ -12,7 +12,7 @@ import rehypeRaw from "rehype-raw";
 
 const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
-export const markdownConfig: Options = {
+const markdownConfig: Options = {
   bullet: "*",
   bulletOther: "-",
   bulletOrdered: ".",
@@ -263,7 +263,7 @@ export default function CreateGig() {
               </ReactMarkdown>
             </div>
           </div>
-          
+
 
           <div className="flex flex-col w-full mr-2 mt-4">
             <label className="text-base text-slate-700 mb-2 ml-1">

@@ -43,7 +43,15 @@ import { Gift, Loader2, Send } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/_navbar/Navbar";
-import { markdownConfig } from "@/app/sponser/create-gig/page";
+
+const markdownConfig: Options = {
+  bullet: "*",
+  bulletOther: "-",
+  bulletOrdered: ".",
+  closeAtx: false,
+  emphasis: "*",
+  fence: "`",
+};
 
 const provider = new Provider(Network.MAINNET);
 
