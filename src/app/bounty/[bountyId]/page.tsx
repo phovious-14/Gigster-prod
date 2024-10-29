@@ -524,7 +524,7 @@ export default function Bounty({ params }: any) {
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-              </div>
+              </div> 
             </div>
             <div className="w-[70%] flex justify-start items-start flex-col">
               <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300 w-full">
