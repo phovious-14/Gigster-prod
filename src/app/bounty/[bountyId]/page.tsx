@@ -103,6 +103,14 @@ export default function Bounty({ params }: any) {
       return;
     }
 
+    if (new Date() > new Date(bounty.endAt)) {
+      toast({
+        title: "You cannot submit bounty due to time limit! ❌",
+        variant: "default",
+      });
+      return;
+    }
+
     try {
       formData.walletAddress = account?.address;
       const response = await fetch(
@@ -117,7 +125,7 @@ export default function Bounty({ params }: any) {
       );
       if (response.ok) {
         toast({
-          title: "You have submiite project!",
+          title: "You have submitted bounty successfully! 🚀",
         });
         router.push("/bounty");
       } else {
@@ -173,6 +181,15 @@ export default function Bounty({ params }: any) {
 
   // Function to send a wish
   const sendWish = async () => {
+    if (account === null) {
+      toast({
+        title: "Wallet connection required.",
+        description: "You need to connect aptos wallet",
+        variant: "default",
+      });
+      return;
+    }
+
     if (!receiverAddress || !greeting) {
       setError("Please fill in both receiver address and greeting");
       return;
@@ -198,13 +215,30 @@ export default function Bounty({ params }: any) {
         },
       });
 
-      await provider.waitForTransaction(response.hash);
-      setSuccess("Wish sent successfully! 🪔");
-      setReceiverAddress("");
-      setGreeting("");
-      toast({
-        title: "You have sent Diwali wishes",
+      const response2 = await fetch(`${BASE_URL}/api/add_diwali_wish`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          receiverAddress,
+          greeting,
+        }),
       });
+      if (response2.ok) {
+        setSuccess("Wish sent successfully! 🪔");
+        setReceiverAddress("");
+        setGreeting("");
+        toast({
+          title: "You have sent Diwali wishes",
+        });
+      } else {
+        toast({
+          title: "Failed to send wish",
+        });
+      }
+
+      await provider.waitForTransaction(response.hash);
 
       // Refresh wishes after sending
       // fetchWishes();
@@ -296,50 +330,52 @@ export default function Bounty({ params }: any) {
           </div>
           <div className="flex justify-center items-start flex-row mt-2">
             <div className="w-[30%]">
-              <div className="w-full mx-auto py-4 space-y-4">
-                {/* Send Wish Card */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Gift className="h-5 w-5" />
-                      Send Diwali Wish
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <Input
-                      placeholder="Receiver Address (0x...)"
-                      value={receiverAddress}
-                      onChange={(e) => setReceiverAddress(e.target.value)}
-                      disabled={isLoading}
-                    />
-                    <Input
-                      placeholder="Your Diwali Greeting"
-                      value={greeting}
-                      onChange={(e) => setGreeting(e.target.value)}
-                      disabled={isLoading}
-                    />
-                    <Button
-                      onClick={sendWish}
-                      disabled={
-                        isLoading ||
-                        !receiverAddress ||
-                        !greeting ||
-                        !account?.address
-                      }
-                      className="w-full"
-                    >
-                      {isLoading ? (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      ) : (
-                        <Send className="mr-2 h-4 w-4" />
-                      )}
-                      Send Wish
-                    </Button>
-                  </CardContent>
-                </Card>
+              {bounty._id == "6720646c99274ff9ee9116b9" && (
+                <div className="w-full mx-auto py-4 space-y-4">
+                  {/* Send Wish Card */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Gift className="h-5 w-5" />
+                        Send Diwali Wish
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <Input
+                        placeholder="Receiver Address (0x...)"
+                        value={receiverAddress}
+                        onChange={(e) => setReceiverAddress(e.target.value)}
+                        disabled={isLoading}
+                      />
+                      <Input
+                        placeholder="Your Diwali Greeting"
+                        value={greeting}
+                        onChange={(e) => setGreeting(e.target.value)}
+                        disabled={isLoading}
+                      />
+                      <Button
+                        onClick={sendWish}
+                        disabled={
+                          isLoading ||
+                          !receiverAddress ||
+                          !greeting ||
+                          !account?.address
+                        }
+                        className="w-full"
+                      >
+                        {isLoading ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <Send className="mr-2 h-4 w-4" />
+                        )}
+                        Send Wish
+                      </Button>
+                    </CardContent>
+                  </Card>
 
-                {/* Status Messages */}
-              </div>
+                  {/* Status Messages */}
+                </div>
+              )}
               <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300">
                 Prizes
               </p>
@@ -488,48 +524,101 @@ export default function Bounty({ params }: any) {
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-              </div>
+              </div> 
             </div>
             <div className="w-[70%] flex justify-start items-start flex-col">
               <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300 w-full">
                 Details
               </p>
               <div className="flex justify-center items-start flex-col w-full p-6">
-                <p className="font-bold text-xl text-slate-700">About Gig</p>
-                <p className="mt-4 mb-6 text-slate-500">{bounty?.about}</p>
+                {bounty?.about?.trim() !== "" && (
+                  <>
+                    <p className="font-bold text-xl text-slate-700">
+                      About Gig
+                    </p>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      <ReactMarkdown
+                        remarkPlugins={[
+                          remarkParse,
+                          [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                          remarkGfm,
+                          remarkBreaks,
+                        ]}
+                        rehypePlugins={[rehypeRaw]}
+                      >
+                        {bounty?.about}
+                      </ReactMarkdown>
+                    </p>
+                  </>
+                )}
                 <p className="font-bold text-xl text-slate-700">
                   Developer Instuctions
                 </p>
-                <p className="mt-4 mb-6 text-slate-500">
-                  {bounty?.devInstructions}
-                </p>
-                <p className="font-bold text-xl text-slate-700">
-                  Judging Criteria
-                </p>
-                <p className="mt-4 mb-6 text-slate-500">
-                  
-              <ReactMarkdown
-                remarkPlugins={[
-                  remarkParse,
-                  [remarkStringify, markdownConfig], // Pass the config to remark-stringify
-                  remarkGfm,
-                  remarkBreaks
-                ]}
-                rehypePlugins={[rehypeRaw]}
-              >{bounty?.judgingCriteria}</ReactMarkdown> 
-                </p>
-                <p className="font-bold text-xl text-slate-700">Rewards</p>
-                <p className="mt-4 mb-6 text-slate-500">
-                  {bounty?.rewardDistribution}
-                </p>
-                <p className="font-bold text-xl text-slate-700">
-                  Submission Requirements
-                </p>
-                <p className="mt-4 mb-6 text-slate-500">
-                  {bounty?.submissionRequirement}
-                </p>
-                <p className="font-bold text-xl text-slate-700">Resources</p>
-                <p className="mt-4 mb-6 text-slate-500">{bounty?.resources}</p>
+                {bounty?.devInstructions?.trim() !== "" && (
+                  <>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      <ReactMarkdown
+                        remarkPlugins={[
+                          remarkParse,
+                          [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                          remarkGfm,
+                          remarkBreaks,
+                        ]}
+                        rehypePlugins={[rehypeRaw]}
+                      >
+                        {bounty?.devInstructions}
+                      </ReactMarkdown>
+                    </p>
+                    <p className="font-bold text-xl text-slate-700">
+                      Judging Criteria
+                    </p>
+                  </>
+                )}
+                {bounty?.judgingCriteria?.trim() !== "" && (
+                  <>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      <ReactMarkdown
+                        remarkPlugins={[
+                          remarkParse,
+                          [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                          remarkGfm,
+                          remarkBreaks,
+                        ]}
+                        rehypePlugins={[rehypeRaw]}
+                      >
+                        {bounty?.judgingCriteria}
+                      </ReactMarkdown>
+                    </p>
+                  </>
+                )}
+                {bounty?.rewardDistribution?.trim() !== "" && (
+                  <>
+                    <p className="font-bold text-xl text-slate-700">Rewards</p>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      {bounty?.rewardDistribution}
+                    </p>
+                  </>
+                )}
+                {bounty?.submissionRequirement?.trim() !== "" && (
+                  <>
+                    <p className="font-bold text-xl text-slate-700">
+                      Submission Requirements
+                    </p>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      {bounty?.submissionRequirement}
+                    </p>
+                  </>
+                )}
+                {bounty?.resources?.trim() !== "" && (
+                  <>
+                    <p className="font-bold text-xl text-slate-700">
+                      Resources
+                    </p>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      {bounty?.resources}
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </div> 
