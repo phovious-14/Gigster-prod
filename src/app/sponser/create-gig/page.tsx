@@ -263,6 +263,7 @@ export default function CreateGig() {
               </ReactMarkdown>
             </div>
           </div>
+          
 
           <div className="flex flex-col w-full mr-2 mt-4">
             <label className="text-base text-slate-700 mb-2 ml-1">
