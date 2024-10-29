@@ -532,7 +532,7 @@ export default function Bounty({ params }: any) {
                 <p className="mt-4 mb-6 text-slate-500">{bounty?.resources}</p>
               </div>
             </div>
-          </div>
+          </div> 
         </div>
       </div>
     </>
