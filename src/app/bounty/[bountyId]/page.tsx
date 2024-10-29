@@ -1,6 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkParse from "remark-parse";
+import remarkStringify, { Options } from "remark-stringify";
+import remarkGfm from "remark-gfm"; // To handle GFM features like lists
+import rehypeRaw from "rehype-raw";
+import remarkBreaks from "remark-breaks";
 // import {
 //     Modal,
 //     ModalOverlay,
@@ -37,6 +43,7 @@ import { Gift, Loader2, Send } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Navbar from "@/components/_navbar/Navbar";
+import { markdownConfig } from "@/app/sponser/create-gig/page";
 
 const provider = new Provider(Network.MAINNET);
 
@@ -492,7 +499,16 @@ export default function Bounty({ params }: any) {
                   Judging Criteria
                 </p>
                 <p className="mt-4 mb-6 text-slate-500">
-                  {bounty?.judgingCriteria}
+                  
+              <ReactMarkdown
+                remarkPlugins={[
+                  remarkParse,
+                  [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                  remarkGfm,
+                  remarkBreaks
+                ]}
+                rehypePlugins={[rehypeRaw]}
+              >{bounty?.judgingCriteria}</ReactMarkdown> 
                 </p>
                 <p className="font-bold text-xl text-slate-700">Rewards</p>
                 <p className="mt-4 mb-6 text-slate-500">
