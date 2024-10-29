@@ -1,6 +1,5 @@
 "use client";
 
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import Image from "next/image";
 import Link from "next/link";
 import { formatDateToDDMMYYYYHM } from "../formatDateToDDMMYYYYHM/formatDateToDDMMYYYYHM";
@@ -46,7 +45,10 @@ export default function Bounty({ bounties, userType, userAddress }: any) {
                     return (
                         <Link
                             key={index}
-                            href={userType === 'sponser' && item.creatorAddress !== userAddress ? `/bounty/${item._id}` : `/sponser/my-bounty/${item._id}`}
+                            href={{
+                                pathname: userType === 'sponser' && item.creatorAddress === userAddress ? `/sponser/my-bounty/${item._id}` : `/bounty/${item._id}`,
+                                query: { userType }
+                            }}
                             className="bg-[#ffffff] w-full flex justify-start items-start flex-row p-4 rounded-lg shadow-md m-1"
                         >
                             <Image src={"https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"} className="rounded-full" width={50} height={50} alt="" />
