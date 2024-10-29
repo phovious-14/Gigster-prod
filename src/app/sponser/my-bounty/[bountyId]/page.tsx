@@ -1,5 +1,5 @@
 "use client";
-
+import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import ProjectCard from "@/components/_projects/project-card";
 import ProjectList from "@/components/_projects/ProjectList";
@@ -16,6 +16,11 @@ import DistributeBounty from "@/components/_bounty/DistributeBounty";
 import WinnerList from "@/components/winner_list/WinnerList";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import remarkParse from "remark-parse";
+import remarkStringify from "remark-stringify";
+import { markdownConfig } from "../../create-gig/page";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 export default function Bounty({ params }: any) {
   const { userType }: any = useUser();
@@ -232,27 +237,72 @@ export default function Bounty({ params }: any) {
                     Developer Instructions
                   </p>
                   <p className="mt-4 mb-6 text-slate-500">
-                    {bounty?.devInstructions}
+                    <ReactMarkdown
+                      remarkPlugins={[
+                        remarkParse,
+                        [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                        remarkGfm,
+                      ]}
+                      rehypePlugins={[rehypeRaw]}
+                    >
+                      {bounty?.devInstructions}
+                    </ReactMarkdown>
                   </p>
                   <p className="font-bold text-xl text-slate-700">
                     Judging Criteria
                   </p>
                   <p className="mt-4 mb-6 text-slate-500">
-                    {bounty?.judgingCriteria}
+                    <ReactMarkdown
+                      remarkPlugins={[
+                        remarkParse,
+                        [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                        remarkGfm,
+                      ]}
+                      rehypePlugins={[rehypeRaw]}
+                    >
+                      {bounty?.judgingCriteria}
+                    </ReactMarkdown>
                   </p>
                   <p className="font-bold text-xl text-slate-700">Rewards</p>
                   <p className="mt-4 mb-6 text-slate-500">
-                    {bounty?.rewardDistribution}
+                    <ReactMarkdown
+                      remarkPlugins={[
+                        remarkParse,
+                        [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                        remarkGfm,
+                      ]}
+                      rehypePlugins={[rehypeRaw]}
+                    >
+                      {bounty?.rewardDistribution}
+                    </ReactMarkdown>
                   </p>
                   <p className="font-bold text-xl text-slate-700">
                     Submission Requirements
                   </p>
                   <p className="mt-4 mb-6 text-slate-500">
-                    {bounty?.submissionRequirement}
+                    <ReactMarkdown
+                      remarkPlugins={[
+                        remarkParse,
+                        [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                        remarkGfm,
+                      ]}
+                      rehypePlugins={[rehypeRaw]}
+                    >
+                      {bounty?.submissionRequirement}
+                    </ReactMarkdown>
                   </p>
                   <p className="font-bold text-xl text-slate-700">Resources</p>
                   <p className="mt-4 mb-6 text-slate-500">
-                    {bounty?.resources}
+                    <ReactMarkdown
+                      remarkPlugins={[
+                        remarkParse,
+                        [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                        remarkGfm,
+                      ]}
+                      rehypePlugins={[rehypeRaw]}
+                    >
+                      {bounty?.resources}
+                    </ReactMarkdown>
                   </p>
                 </div>
               </TabsContent>
