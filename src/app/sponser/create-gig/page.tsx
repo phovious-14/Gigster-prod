@@ -152,7 +152,7 @@ export default function CreateGig() {
             value={formData.type}
             onChange={handleChange}
           >
-            <option value="Contest">Contest</option>
+            <option value="Content">Content</option>
             <option value="Event">Event</option>
             <option value="Tech">Tech</option>
           </select>
