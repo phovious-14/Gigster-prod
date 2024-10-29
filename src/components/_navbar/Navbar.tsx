@@ -23,7 +23,7 @@ const Navbar = () => {
               </Link>
 
               <Link href="/bounty" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
-                bounty
+                Bounty
               </Link>
 
               {/* <a href="#feature-gigs" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
@@ -36,12 +36,12 @@ const Navbar = () => {
               {/* <a href="#" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Contibutor
               </a> */}
-              <a href="#faqs" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+              {/* <a href="#faqs" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 FAQs
-              </a>
-              <Link href="/get-in-touch" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
+              </a> */}
+              {/* <Link href="/get-in-touch" className="mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900">
                 Get In Touch
-              </Link>
+              </Link> */}
             </nav>
           </div>
           <WalletSelector  />

@@ -1,7 +1,7 @@
 // hooks.ts
 
 import { useQuery } from '@tanstack/react-query'
-import { fetchUserType, fetchBounties } from '../utils/apiFunctions'
+import { fetchUserType, fetchBounties, fetchBountiesCount } from '../utils/apiFunctions'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
@@ -21,13 +21,19 @@ export const useUserType = (address: string | undefined) => {
   })
 }
 
-export const useBounties = (address: string | undefined, userType: string | undefined) => {
-  console.log(address, userType);
-
-  
+export const useBounties = (address: string | undefined, userType: string | undefined) => {  
   return useQuery({
     queryKey: ['bounties', address, userType],
     queryFn: () => fetchBounties(address || "", userType || ""),
+    // enabled: !!address && !!userType,
+    retry: false,
+  })
+}
+
+export const useBountiesCount = (address: string | undefined, userType: string | undefined) => {  
+  return useQuery({
+    queryKey: ['bountiesCount', address, userType],
+    queryFn: () => fetchBountiesCount(address || "", userType || ""),
     // enabled: !!address && !!userType,
     retry: false,
   })
