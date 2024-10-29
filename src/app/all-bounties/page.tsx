@@ -1,20 +1,22 @@
 "use client";
-import React, { useEffect } from "react";
+
 import Bounty from "@/components/_bounty/Bounty";
 import Footer from "@/components/_navbar/Footer";
 import Navbar from "@/components/_navbar/Navbar";
 import Navbar2 from "@/components/_navbar/NavbarSponser";
 import Loading from "@/components/Loading";
+import { toast } from "@/components/ui/use-toast";
+import { useUser } from "@/context/UserContext";
 import { useBounties, useUserType } from "@/hooks/hooks";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
-import { toast } from "@/components/ui/use-toast";
+import { useEffect } from "react";
 
 const AllBountiesPage = () => {
   const { account } = useWallet();
   const router = useRouter();
 
-  const { data: userData } = useUserType(account?.address || "");
+  const { data: userData } = useUserType(account?.address || "");  
   const { data: bountiesData, isLoading: bountiesLoading } = useBounties();
 
   useEffect(() => {
@@ -30,6 +32,8 @@ const AllBountiesPage = () => {
   if (bountiesLoading) {
     return <Loading />;
   }
+
+  const totalOpportunities = bountiesData ? bountiesData.length : 0;
 
   return (
     <>
@@ -61,39 +65,14 @@ const AllBountiesPage = () => {
             />
           </div>
           <div className="flex justify-center items-start flex-col w-[34%]">
-            {userData?.userType === "sponser" ? (
-              <div className="flex justify-between items-center flex-row w-full bg-[#ecf4ff] p-6 rounded-lg">
-                <div className="flex justify-center items-start flex-col w-1/2">
-                  <span className="font-bold text-lg">$ 55,000</span>
-                  <span className="text-center text-[12px] mt-2">
-                    Total value rewarded
-                  </span>
-                </div>
-                <div className="w-[1px] h-[40px] bg-gray-400"></div>
-                <div className="flex justify-center items-start ml-4 flex-col w-1/2">
-                  <span className="text-lg font-bold">14</span>
-                  <span className="text-center text-xs mt-2">
-                    Opportunity Listed
-                  </span>
-                </div>
+            <div className="flex justify-between items-center flex-row w-full bg-[#ecf4ff] p-6 rounded-lg">
+              <div className="flex justify-center items-start ml-4 flex-col w-1/2">
+                <span className="text-lg font-bold">{totalOpportunities}</span>
+                <span className="text-center text-xs mt-2">
+                  Total Opportunities Listed
+                </span>
               </div>
-            ) : userData?.userType === "hunter" ? (
-              <div className="flex justify-between items-center flex-row w-full bg-[#ecf4ff] p-6 rounded-lg">
-                <div className="flex justify-center items-start flex-col w-1/2">
-                  <span className="font-bold text-lg">$ 55,000</span>
-                  <span className="text-center text-[12px] mt-2">
-                    Total value earned
-                  </span>
-                </div>
-                <div className="w-[1px] h-[40px] bg-gray-400"></div>
-                <div className="flex justify-center items-start ml-4 flex-col w-1/2">
-                  <span className="text-lg font-bold">14</span>
-                  <span className="text-center text-xs mt-2">
-                    Opportunity Listed
-                  </span>
-                </div>
-              </div>
-            ) : <></>} 
+            </div>
           </div>
         </div>
       </div>
