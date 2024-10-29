@@ -7,7 +7,7 @@ import Navbar2 from "@/components/_navbar/NavbarSponser";
 import Loading from "@/components/Loading";
 import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@/context/UserContext";
-import { useBounties, useUserType } from "@/hooks/hooks";
+import { useBounties, useBountiesCount, useUserType } from "@/hooks/hooks";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 // import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -20,7 +20,10 @@ export default function Dashboard() {
 
   const { data: userData } = useUserType(account?.address || "");  
   const { data: bountiesData, isLoading: bountiesLoading } = useBounties(account?.address || undefined, userData?.userType || undefined);
-  console.log(bountiesData);
+  const { data: bountiesCountData, isLoading: bountiesCountLoading } = useBountiesCount(
+    account?.address || undefined,
+    userData?.userType || undefined
+  );
   
   // useEffect(() => {
   //   if (!account) {
@@ -80,15 +83,15 @@ export default function Dashboard() {
           <div className="flex justify-center items-start flex-col w-[34%]">
             {userData?.userType === "sponser" ? (
               <div className="flex justify-between items-center flex-row w-full bg-[#ecf4ff] p-6 rounded-lg">
-                <div className="flex justify-center items-start flex-col w-1/2">
+                {/* <div className="flex justify-center items-start flex-col w-1/2">
                   <span className="font-bold text-lg">$ 55,000</span>
                   <span className="text-center text-[12px] mt-2">
                     Total value rewarded
                   </span>
                 </div>
-                <div className="w-[1px] h-[40px] bg-gray-400"></div>
+                <div className="w-[1px] h-[40px] bg-gray-400"></div> */}
                 <div className="flex justify-center items-start ml-4 flex-col w-1/2">
-                  <span className="text-lg font-bold">14</span>
+                  <span className="text-lg font-bold">{String(JSON.stringify(bountiesCountData))}</span>
                   <span className="text-center text-xs mt-2">
                     Opportunity Listed
                   </span>
@@ -96,15 +99,15 @@ export default function Dashboard() {
               </div>
             ) : userData?.userType === "hunter" ? (
               <div className="flex justify-between items-center flex-row w-full bg-[#ecf4ff] p-6 rounded-lg">
-                <div className="flex justify-center items-start flex-col w-1/2">
+                {/* <div className="flex justify-center items-start flex-col w-1/2">
                   <span className="font-bold text-lg">$ 55,000</span>
                   <span className="text-center text-[12px] mt-2">
                     Total value earned
                   </span>
                 </div>
-                <div className="w-[1px] h-[40px] bg-gray-400"></div>
+                <div className="w-[1px] h-[40px] bg-gray-400"></div> */}
                 <div className="flex justify-center items-start ml-4 flex-col w-1/2">
-                  <span className="text-lg font-bold">14</span>
+                  <span className="text-lg font-bold">{bountiesData.length || ""}</span>
                   <span className="text-center text-xs mt-2">
                     Opportunity Listed
                   </span>

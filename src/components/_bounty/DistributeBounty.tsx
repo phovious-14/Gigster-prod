@@ -33,7 +33,6 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
 
     try {
       const recipients = winnerList.map((winner: any) => winner.walletAddress);
-      console.log(recipients);
 
       const amounts = [
         (parseFloat(amt1) * 100_000_000).toString(),
@@ -54,25 +53,32 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
       // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(payload);
       // wait for transaction
-      await provider.waitForTransaction(response.hash);
+      provider.waitForTransaction(response.hash).then(async () => {
+        const response2 = await fetch(
+          `${BASE_URL}/api/add_reward_distribution/${bountyId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (response2.ok) {
+          toast({
+            title: "All transactions have been successfully sent! ✔️",
+          });
+        }
+      })
+      .catch((e) => {
+        toast({
+          title: "Payment failed ❌",
+        });
+        console.log(e);        
+      })
 
       // await fetchAccountBalance();
 
-      const response2 = await fetch(
-        `${BASE_URL}/api/add_reward_distribution/${bountyId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response2.ok) {
-        //alert
-        toast({
-          title: "All transactions have been successfully sent! ✔️",
-        });
-      }
+      
     } catch (error: any) {
       console.log(error);
     } finally {
@@ -150,7 +156,7 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
                 {winnerList[1]?.submissionTitle}
               </label>
               <span className="text-sm text-slate-400">
-                {winnerList[0]?.walletAddress}
+                {winnerList[1]?.walletAddress}
               </span>
               <input
                 placeholder="APT Amount"
@@ -172,10 +178,10 @@ export default function DistributeBounty({ bountyId, winnerList }: any) {
             />
             <div className="flex flex-col w-full mr-2 mt-4">
               <label className="text-base text-slate-700 mb-2 ml-1">
-                {winnerList[1]?.submissionTitle}
+                {winnerList[2]?.submissionTitle}
               </label>
               <span className="text-sm text-slate-400">
-                {winnerList[0]?.walletAddress}
+                {winnerList[2]?.walletAddress}
               </span>
               <input
                 placeholder="APT Amount"
