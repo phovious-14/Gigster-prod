@@ -144,7 +144,15 @@ export default function Bounty({ params }: any) {
         variant: "default",
       });
       return;
+    
     }
+
+    if (!formData.submissionLink) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    // Submit the form
+    console.log('Form submitted', formData);
 
     try {
       formData.walletAddress = account?.address;
@@ -160,7 +168,7 @@ export default function Bounty({ params }: any) {
       );
       if (response.ok) {
         toast({
-          title: "You have submiite project!",
+          title: "You have successfully submited bounty!",
         });
         router.push("/bounty");
       } else {
@@ -459,7 +467,7 @@ export default function Bounty({ params }: any) {
                   <div>
                     <div className="flex flex-col w-full mr-2 mt-4">
                       <label className="text-base text-slate-700 mb-2 ml-1">
-                        Your Gig Title <span className="text-red-500">*</span>
+                        Your Gig Title 
                       </label>
                       <input
                         placeholder="Your Gig Title"
@@ -491,7 +499,7 @@ export default function Bounty({ params }: any) {
                     </div>
                     <div className="flex flex-col w-full mr-2 mt-4">
                       <label className="text-base text-slate-700 ml-1">
-                        Tweet Link <span className="text-red-500">*</span>
+                        Tweet Link 
                       </label>
                       <span className="text-slate-400 text-sm ml-1">
                         This helps sponsors discover (and maybe repost) your
@@ -510,7 +518,7 @@ export default function Bounty({ params }: any) {
                     </div>
                     <div className="flex flex-col w-full mr-2 mt-4">
                       <label className="text-base text-slate-700 ml-1">
-                        Anything Else? <span className="text-red-500">*</span>
+                        Anything Else?
                       </label>
                       <span className="text-slate-400 text-sm ml-1">
                         If you have any other links or information you would
