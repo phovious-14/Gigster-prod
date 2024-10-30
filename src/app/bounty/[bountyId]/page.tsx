@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkParse from "remark-parse";
 import remarkStringify, { Options } from "remark-stringify";
@@ -61,22 +60,8 @@ const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 const MODULE_ADDRESS =
   "0xb4c500b5a0beba1a70f41a2479c86e7d611bfaa381403d00971cef13040fb3d3";
 
-// Helper function to calculate the time difference
-function getTimeDifference(date1: any, date2: any) {
-  const diff = date2 - date1;
-  const minutes = Math.floor(diff / (1000 * 60));
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-  if (days > 0) return `${days} days`;
-  if (hours > 0) return `${hours} hours`;
-  if (minutes > 0) return `${minutes} minutes`;
-  return "a few moments";
-}
-
 export default function Bounty({ params }: any) {
   const { account, signAndSubmitTransaction } = useWallet();
-  const userAddress = account?.address;
   const [bounty, setBounty] = useState<any>([]);
   const [isSubmitted, setIsSubmitted] = useState<Boolean>(false);
   const router = useRouter();
@@ -92,40 +77,12 @@ export default function Bounty({ params }: any) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-
   const [formData, setFormData] = useState<any>({
     title: "",
     submissionLink: "",
     twitterLink: "",
     anythingElse: "",
   });
-
-  const getBountyStatus = (startDate: Date, endDate: Date, currentDate: Date) => {
-    if (currentDate < startDate) {
-      return {
-        status: `Starting in ${getTimeDifference(currentDate, startDate)}`,
-        color: "text-blue-500",
-        submissionStatus: "Submissions open soon",
-        submissionColor: "text-blue-500",
-      };
-    } else if (currentDate >= startDate && currentDate <= endDate) {
-      return {
-        status: "Live",
-        color: "text-green-500",
-        submissionStatus: "Submissions open",
-        submissionColor: "text-green-500",
-      };
-    } else {
-      return {
-        status: "Ended",
-        color: "text-red-500",
-        submissionStatus: "Submissions closed",
-        submissionColor: "text-red-500",
-      };
-    }
-  };
-
-  const statusInfo = getBountyStatus(new Date(bounty.startAt), new Date(bounty.endAt), new Date());
 
   const handleChange = (e: any) => {
     setFormData({
@@ -144,9 +101,9 @@ export default function Bounty({ params }: any) {
         variant: "default",
       });
       return;
-    
     }
 
+    
     if (!formData.submissionLink) {
       alert('Please fill in all required fields.');
       return;
@@ -168,7 +125,7 @@ export default function Bounty({ params }: any) {
       );
       if (response.ok) {
         toast({
-          title: "You have successfully submited bounty!",
+          title: "You have submitted bounty successfully! 🚀",
         });
         router.push("/bounty");
       } else {
@@ -222,8 +179,58 @@ export default function Bounty({ params }: any) {
     }
   };
 
+  // Helper function to calculate the time difference
+function getTimeDifference(date1: any, date2: any) {
+  const diff = date2 - date1;
+  const minutes = Math.floor(diff / (1000 * 60));
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  if (days > 0) return `${days} days`;
+  if (hours > 0) return `${hours} hours`;
+  if (minutes > 0) return `${minutes} minutes`;
+  return "a few moments";
+}
+
+  //FUNCTION TO DATE CONFIGURE
+  const getBountyStatus = (startDate: Date, endDate: Date, currentDate: Date) => {
+    if (currentDate < startDate) {
+      return {
+        status: `Starting in ${getTimeDifference(currentDate, startDate)}`,
+        color: "text-blue-500",
+        submissionStatus: "Submissions open soon",
+        submissionColor: "text-blue-500",
+      };
+    } else if (currentDate >= startDate && currentDate <= endDate) {
+      return {
+        status: "Live",
+        color: "text-green-500",
+        submissionStatus: "Submissions open",
+        submissionColor: "text-green-500",
+      };
+    } else {
+      return {
+        status: "Ended",
+        color: "text-red-500",
+        submissionStatus: "Submissions closed",
+        submissionColor: "text-red-500",
+      };
+    }
+  };
+
+  const statusInfo = getBountyStatus(new Date(bounty.startAt), new Date(bounty.endAt), new Date());
+
   // Function to send a wish
   const sendWish = async () => {
+    if (account === null) {
+      toast({
+        title: "Wallet connection required.",
+        description: "You need to connect aptos wallet",
+        variant: "default",
+      });
+      return;
+    }
+
     if (!receiverAddress || !greeting) {
       setError("Please fill in both receiver address and greeting");
       return;
@@ -249,13 +256,32 @@ export default function Bounty({ params }: any) {
         },
       });
 
-      await provider.waitForTransaction(response.hash);
-      setSuccess("Wish sent successfully! 🪔");
-      setReceiverAddress("");
-      setGreeting("");
-      toast({
-        title: "You have sent Diwali wishes",
+      const response2 = await fetch(`${BASE_URL}/api/add_diwali_wish`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          receiverAddress,
+          greeting,
+        }),
       });
+      if (response2.ok) {
+        setSuccess("Wish sent successfully! 🪔");
+        setReceiverAddress("");
+        setGreeting("");
+        toast({
+          title: "You have sent Diwali wishes",
+        });
+      } else {
+        toast({
+          title: "Failed to send wish",
+        });
+      }
+
+
+
+      await provider.waitForTransaction(response.hash);
 
       // Refresh wishes after sending
       // fetchWishes();
@@ -269,8 +295,6 @@ export default function Bounty({ params }: any) {
     }
   };
 
- 
-
   useEffect(() => {
     fetchBounty();
   }, [bountyId]);
@@ -282,7 +306,9 @@ export default function Bounty({ params }: any) {
         <div className="w-[80%]">
           <div className="w-full flex justify-start items-start flex-row p-4 rounded-lg shadow-md m-1">
             <Image
-              src="https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"
+              src={
+                "https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"
+              }
               className="rounded-full"
               width={50}
               height={50}
@@ -320,273 +346,326 @@ export default function Bounty({ params }: any) {
                       d="M11.5 3a9.5 9.5 0 0 1 9.5 9.5a9.5 9.5 0 0 1-9.5 9.5A9.5 9.5 0 0 1 2 12.5A9.5 9.5 0 0 1 11.5 3m0 1A8.5 8.5 0 0 0 3 12.5a8.5 8.5 0 0 0 8.5 8.5a8.5 8.5 0 0 0 8.5-8.5A8.5 8.5 0 0 0 11.5 4M11 7h1v5.42l4.7 2.71l-.5.87l-5.2-3z"
                     />
                   </svg>
-                  <span className={`ml-1 ${statusInfo.submissionColor}`}>
-          {statusInfo.submissionStatus}
-        </span>
+                  <span className={`ml-1 ${statusInfo.submissionColor}`}> {statusInfo.submissionStatus}</span>
                 </div>
                 <div className="ml-2">|</div>
                 <div className="flex ml-3 mt-[2px] justify-start items-center">
-                  <div >
-                  <span className={statusInfo.color}>
-                   {statusInfo.status}
-                  </span>
+                  <div className={statusInfo.color}></div>
+                  <span className={statusInfo.color}>{statusInfo.status}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end flex-row items-center flex-grow ">
+              <Image
+                src={
+                  "https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"
+                }
+                className="rounded-full"
+                width={20}
+                height={20}
+                alt=""
+              />
+              <span className="text-lg text-slate-800 ml-4 mr-2">
+                {bounty?.budget}
+              </span>
+              <span className="text-slate-400 text-base"> APT</span>
+            </div>
+          </div>
+          <div className="flex justify-center items-start flex-row mt-2">
+            <div className="w-[30%]">
+              {bounty._id == "671f0d1ea06d723723679c76" && (
+                <div className="w-full mx-auto py-4 space-y-4">
+                  {/* Send Wish Card */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Gift className="h-5 w-5" />
+                        Send Diwali Wish
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <Input
+                        placeholder="Receiver Address (0x...)"
+                        value={receiverAddress}
+                        onChange={(e) => setReceiverAddress(e.target.value)}
+                        disabled={isLoading}
+                      />
+                      <Input
+                        placeholder="Your Diwali Greeting"
+                        value={greeting}
+                        onChange={(e) => setGreeting(e.target.value)}
+                        disabled={isLoading}
+                      />
+                      <Button
+                        onClick={sendWish}
+                        disabled={
+                          isLoading ||
+                          !receiverAddress ||
+                          !greeting ||
+                          !account?.address
+                        }
+                        className="w-full"
+                      >
+                        {isLoading ? (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                          <Send className="mr-2 h-4 w-4" />
+                        )}
+                        Send Wish
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* Status Messages */}
+                </div>
+              )}
+              <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300">
+                Prizes
+              </p>
+              <div className="w-full p-2 border-[1px] border-transparent border-r-slate-300">
+                <div className="flex justify-start items-center gap-2 p-2">
+                  <Image
+                    src={
+                      "https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"
+                    }
+                    className="rounded-full"
+                    width={30}
+                    height={30}
+                    alt=""
+                  />
+                  <div>
+                    <span className="text-lg font-bold text-slate-800">
+                      {bounty.budget}
+                    </span>
+                    <span className="ml-2">APT</span>
+                    <span className="text-slate-500 ml-4">Total Prizes</span>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-end flex-row items-center flex-grow">
-            <Image
-              src="https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"
-              className="rounded-full"
-              width={20}
-              height={20}
-              alt=""
-            />
-            <span className="text-lg text-slate-800 ml-4 mr-2">
-              {bounty?.budget}
-            </span>
-            <span className="text-slate-400 text-base"> APT</span>
-          </div>
-        </div>
-        <div className="flex justify-center items-start flex-row mt-2">
-          <div className="w-[30%]">
-            <div className="w-full mx-auto py-4 space-y-4">
-              {/* Send Wish Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Gift className="h-5 w-5" />
-                    Send Diwali Wish
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <Input
-                    placeholder="Receiver Address (0x...)"
-                    value={receiverAddress}
-                    onChange={(e) => setReceiverAddress(e.target.value)}
-                    disabled={isLoading}
-                  />
-                  <Input
-                    placeholder="Your Diwali Greeting"
-                    value={greeting}
-                    onChange={(e) => setGreeting(e.target.value)}
-                    disabled={isLoading}
-                  />
-                  <Button
-                    onClick={sendWish}
-                    disabled={
-                      isLoading ||
-                      !receiverAddress ||
-                      !greeting ||
-                      !account?.address
-                    }
-                    className="w-full"
-                  >
-                    {isLoading ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <Send className="mr-2 h-4 w-4" />
-                    )}
-                    Send Wish
-                  </Button>
-                </CardContent>
-              </Card>
-  
-              {/* Status Messages */}
-            </div>
-            <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300">
-              Prizes
-            </p>
-            <div className="w-full p-2 border-[1px] border-transparent border-r-slate-300">
-              <div className="flex justify-start items-center gap-2 p-2">
-                <Image
-                  src="https://tse1.mm.bing.net/th?id=OIP.bHrShAEKhWrUzdP3v8a5CQHaHb&pid=Api&P=0&h=180"
-                  className="rounded-full"
-                  width={30}
-                  height={30}
-                  alt=""
-                />
-                <div>
-                  <span className="text-lg font-bold text-slate-800">
-                    {bounty.budget}
-                  </span>
-                  <span className="ml-2">APT</span>
-                  <span className="text-slate-500 ml-4">Total Prizes</span>
+                <div className="flex justify-between items-start flex-row mt-4">
+                  <div className="flex justify-start p-4 items-ceenter flex-col w-[49%] bg-[#f3f6fd] rounded-lg">
+                    <span className="text-sm text-slate-600">
+                      Total Submissions
+                    </span>
+                    <span className="text-slate-800 text-sm font-bold text-center mt-1">
+                      61
+                    </span>
+                  </div>
+                  <div className="flex justify-start p-4 items-center flex-col w-[49%] bg-[#f3f6fd] rounded-lg">
+                    <span className="text-sm text-slate-600">Deadline</span>
+                    <span className="text-slate-800 text-sm font-bold text-center mt-1">
+                      {formatDateToDDMMYYYYHM(bounty?.endAt)}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div className="flex justify-between items-start flex-row mt-4">
-                <div className="flex justify-start p-4 items-center flex-col w-[49%] bg-[#f3f6fd] rounded-lg">
-                  <span className="text-sm text-slate-600">
-                    Total Submissions
-                  </span>
-                  <span className="text-slate-800 text-sm font-bold text-center mt-1">
-                    61
-                  </span>
-                </div>
-                <div className="flex justify-start p-4 items-center flex-col w-[49%] bg-[#f3f6fd] rounded-lg">
-                  <span className="text-sm text-slate-600">Deadline</span>
-                  <span className="text-slate-800 text-sm font-bold text-center mt-1">
-                    {formatDateToDDMMYYYYHM(bounty?.endAt)}
-                  </span>
-                </div>
-              </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    style={{
-                      width: "100%",
-                      padding: "4px",
-                      marginTop: "10px",
-                    }}
-                  >
-                    {isSubmitted ? (
-                      <button
-                        disabled
-                        className="w-full bg-slate-600 text-white p-2 rounded-lg"
-                      >
-                        Submitted
-                      </button>
-                    ) : (
-                      <button
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      style={{
+                        width: "100%",
+                        padding: "4px",
+                        marginTop: "10px",
+                      }}
+                    >
+                      {isSubmitted ? (
+                        <button
+                          disabled
+                          className="w-full bg-slate-600 text-white p-2 rounded-lg"
+                        >
+                          Submitted
+                        </button>
+                      ) : (
+                        <button
                       className={`w-full bg-slate-600 text-white p-2 rounded-lg ${statusInfo.status !== "Live" ? 'cursor-not-allowed' : ''}`}
                         ref={btnRef}
                         disabled={statusInfo.status !== "Live"}
                       >
-                        Submit Now
-                      </button>
-                    )}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Bounty Submission</DialogTitle>
-                    <DialogDescription></DialogDescription>
-                  </DialogHeader>
-                  <div>
-                    <div className="flex flex-col w-full mr-2 mt-4">
-                      <label className="text-base text-slate-700 mb-2 ml-1">
-                        Your Gig Title 
-                      </label>
-                      <input
-                        placeholder="Your Gig Title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        type="text"
-                        className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]"
-                        required
-                      />
-                    </div>
-                    <div className="flex flex-col w-full mr-2 mt-4">
-                      <label className="text-base text-slate-700 ml-1">
-                        Link To Your Submission{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <span className="text-slate-400 text-sm ml-1">
-                        Make sure this link is accessible by everyone!
-                      </span>
-                      <input
-                        placeholder="Link to your submission"
-                        name="submissionLink"
-                        value={formData.submissionLink}
-                        onChange={handleChange}
-                        type="text"
-                        className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]"
-                        required
-                      />
-                    </div>
-                    <div className="flex flex-col w-full mr-2 mt-4">
-                      <label className="text-base text-slate-700 ml-1">
-                        Tweet Link 
-                      </label>
-                      <span className="text-slate-400 text-sm ml-1">
-                        This helps sponsors discover (and maybe repost) your
-                        work on Twitter! If this submission is for a Twitter
-                        thread bounty, you can ignore this field.
-                      </span>
-                      <input
-                        placeholder="Add a tweet link"
-                        name="twitterLink"
-                        value={formData.twitterLink}
-                        onChange={handleChange}
-                        type="text"
-                        className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]"
-                        required
-                      />
-                    </div>
-                    <div className="flex flex-col w-full mr-2 mt-4">
-                      <label className="text-base text-slate-700 ml-1">
-                        Anything Else?
-                      </label>
-                      <span className="text-slate-400 text-sm ml-1">
-                        If you have any other links or information you would
-                        like to share with us, please add them here!
-                      </span>
-                      <input
-                        placeholder="Add info or link"
-                        name="anythingElse"
-                        value={formData.anythingElse}
-                        onChange={handleChange}
-                        type="text"
-                        className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button type="submit" onClick={handleSubmit}>
-                      Submit
+                          Submit Now
+                        </button>
+                      )}
                     </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Bounty Submission</DialogTitle>
+                      <DialogDescription></DialogDescription>
+                    </DialogHeader>
+                    <div>
+                      <div className="flex flex-col w-full mr-2 mt-4">
+                        <label className="text-base text-slate-700 mb-2 ml-1">
+                          Your Gig Title <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          placeholder="Your Gig Title"
+                          name="title"
+                          value={formData.title}
+                          onChange={handleChange}
+                          type="text"
+                          className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]"
+                          required
+                        />
+                      </div>
+                      <div className="flex flex-col w-full mr-2 mt-4">
+                        <label className="text-base text-slate-700 ml-1">
+                          Link To Your Submission{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <span className="text-slate-400 text-sm ml-1">
+                          Make sure this link is accessible by everyone!
+                        </span>
+                        <input
+                          placeholder="Link to your submission"
+                          name="submissionLink"
+                          value={formData.submissionLink}
+                          onChange={handleChange}
+                          type="text"
+                          className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]"
+                          required
+                        />
+                      </div>
+                      <div className="flex flex-col w-full mr-2 mt-4">
+                        <label className="text-base text-slate-700 ml-1">
+                          Tweet Link <span className="text-red-500">*</span>
+                        </label>
+                        <span className="text-slate-400 text-sm ml-1">
+                          This helps sponsors discover (and maybe repost) your
+                          work on Twitter! If this submission is for a Twitter
+                          thread bounty, you can ignore this field.
+                        </span>
+                        <input
+                          placeholder="Add a tweet link"
+                          name="twitterLink"
+                          value={formData.twitterLink}
+                          onChange={handleChange}
+                          type="text"
+                          className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]"
+                          required
+                        />
+                      </div>
+                      <div className="flex flex-col w-full mr-2 mt-4">
+                        <label className="text-base text-slate-700 ml-1">
+                          Anything Else? <span className="text-red-500">*</span>
+                        </label>
+                        <span className="text-slate-400 text-sm ml-1">
+                          If you have any other links or information you would
+                          like to share with us, please add them here!
+                        </span>
+                        <input
+                          placeholder="Add info or link"
+                          name="anythingElse"
+                          value={formData.anythingElse}
+                          onChange={handleChange}
+                          type="text"
+                          className="text-[14px] w-full p-[6px] rounded-lg transition-all border-[2px] border-slate-300 outline-none focus:border-sky-500 focus:border-[3px]"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit" onClick={handleSubmit}>
+                        Submit
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
-          </div>
-          <div className="w-[70%] flex justify-start items-start flex-col">
-            <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300 w-full">
-              Details
-            </p>
-            <div className="flex justify-center items-start flex-col w-full p-6">
-              <p className="font-bold text-xl text-slate-700">About Gig</p>
-              <p className="mt-4 mb-6 text-slate-500">{bounty?.about}</p>
-              <p className="font-bold text-xl text-slate-700">
-                Developer Instuctions
+            <div className="w-[70%] flex justify-start items-start flex-col">
+              <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300 w-full">
+                Details
               </p>
-              <p className="mt-4 mb-6 text-slate-500">
-                {bounty?.devInstructions}
-              </p>
-              <p className="font-bold text-xl text-slate-700">
-                Judging Criteria
-              </p>
-              <p className="mt-4 mb-6 text-slate-500">
-                <ReactMarkdown
-                  remarkPlugins={[
-                    remarkParse,
-                    [remarkStringify, markdownConfig], // Pass the config to remark-stringify
-                    remarkGfm,
-                    remarkBreaks
-                  ]}
-                  rehypePlugins={[rehypeRaw]}
-                >
-                  {bounty?.judgingCriteria}
-                </ReactMarkdown>
-              </p>
-              <p className="font-bold text-xl text-slate-700">Rewards</p>
-              <p className="mt-4 mb-6 text-slate-500">
-                {bounty?.rewardDistribution}
-              </p>
-              <p className="font-bold text-xl text-slate-700">
-                Submission Requirements
-              </p>
-              <p className="mt-4 mb-6 text-slate-500">
-                {bounty?.submissionRequirement}
-              </p>
-              <p className="font-bold text-xl text-slate-700">Resources</p>
-              <p className="mt-4 mb-6 text-slate-500">{bounty?.resources}</p>
+              <div className="flex justify-center items-start flex-col w-full p-6">
+                {bounty?.about?.trim() !== "" && (
+                  <>
+                    <p className="font-bold text-xl text-slate-700">
+                      About Gig
+                    </p>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      <ReactMarkdown
+                        remarkPlugins={[
+                          remarkParse,
+                          [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                          remarkGfm,
+                          remarkBreaks,
+                        ]}
+                        rehypePlugins={[rehypeRaw]}
+                      >
+                        {bounty?.about}
+                      </ReactMarkdown>
+                    </p>
+                  </>
+                )}
+                <p className="font-bold text-xl text-slate-700">
+                  Developer Instuctions
+                </p>
+                {bounty?.devInstructions?.trim() !== "" && (
+                  <>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      <ReactMarkdown
+                        remarkPlugins={[
+                          remarkParse,
+                          [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                          remarkGfm,
+                          remarkBreaks,
+                        ]}
+                        rehypePlugins={[rehypeRaw]}
+                      >
+                        {bounty?.devInstructions}
+                      </ReactMarkdown>
+                    </p>
+                    <p className="font-bold text-xl text-slate-700">
+                      Judging Criteria
+                    </p>
+                  </>
+                )}
+                {bounty?.judgingCriteria?.trim() !== "" && (
+                  <>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      <ReactMarkdown
+                        remarkPlugins={[
+                          remarkParse,
+                          [remarkStringify, markdownConfig], // Pass the config to remark-stringify
+                          remarkGfm,
+                          remarkBreaks,
+                        ]}
+                        rehypePlugins={[rehypeRaw]}
+                      >
+                        {bounty?.judgingCriteria}
+                      </ReactMarkdown>
+                    </p>
+                  </>
+                )}
+                {bounty?.rewardDistribution?.trim() !== "" && (
+                  <>
+                    <p className="font-bold text-xl text-slate-700">Rewards</p>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      {bounty?.rewardDistribution}
+                    </p>
+                  </>
+                )}
+                {bounty?.submissionRequirement?.trim() !== "" && (
+                  <>
+                    <p className="font-bold text-xl text-slate-700">
+                      Submission Requirements
+                    </p>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      {bounty?.submissionRequirement}
+                    </p>
+                  </>
+                )}
+                {bounty?.resources?.trim() !== "" && (
+                  <>
+                    <p className="font-bold text-xl text-slate-700">
+                      Resources
+                    </p>
+                    <p className="mt-4 mb-6 text-slate-500">
+                      {bounty?.resources}
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
+          </div> 
         </div>
       </div>
     </>
