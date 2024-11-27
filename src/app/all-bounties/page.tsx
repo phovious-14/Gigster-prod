@@ -17,7 +17,7 @@ const AllBountiesPage = () => {
   const router = useRouter();
 
   const { data: userData } = useUserType(account?.address || "");  
-  const { data: bountiesData, isLoading: bountiesLoading } = useBounties();
+  const { data: bountiesData, isLoading: bountiesLoading } = useBounties(account?.address || undefined, userData?.userType || undefined);
 
   useEffect(() => {
     if (userData?.userType === "") {
