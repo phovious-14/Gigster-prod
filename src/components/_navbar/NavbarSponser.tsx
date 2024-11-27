@@ -15,6 +15,7 @@ const Navbar2 = () => {
     { href: "/sponser/create-gig", label: "Create Gig" },
     { href: "/swap", label: "Swap" },
     { href: "/get-in-touch", label: "Get In Touch" },
+    { href: "/all-bounties", label: "All Bounties" },
   ];
 
   return (

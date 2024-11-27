@@ -103,13 +103,13 @@ export default function Bounty({ params }: any) {
       return;
     }
 
-    if (new Date() > new Date(bounty.endAt)) {
-      toast({
-        title: "You cannot submit bounty due to time limit! ❌",
-        variant: "default",
-      });
+    
+    if (!formData.submissionLink) {
+      alert('Please fill in all required fields.');
       return;
     }
+    // Submit the form
+    console.log('Form submitted', formData);
 
     try {
       formData.walletAddress = account?.address;
@@ -179,6 +179,47 @@ export default function Bounty({ params }: any) {
     }
   };
 
+  // Helper function to calculate the time difference
+function getTimeDifference(date1: any, date2: any) {
+  const diff = date2 - date1;
+  const minutes = Math.floor(diff / (1000 * 60));
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  if (days > 0) return `${days} days`;
+  if (hours > 0) return `${hours} hours`;
+  if (minutes > 0) return `${minutes} minutes`;
+  return "a few moments";
+}
+
+  //FUNCTION TO DATE CONFIGURE
+  const getBountyStatus = (startDate: Date, endDate: Date, currentDate: Date) => {
+    if (currentDate < startDate) {
+      return {
+        status: `Starting in ${getTimeDifference(currentDate, startDate)}`,
+        color: "text-blue-500",
+        submissionStatus: "Submissions open soon",
+        submissionColor: "text-blue-500",
+      };
+    } else if (currentDate >= startDate && currentDate <= endDate) {
+      return {
+        status: "Live",
+        color: "text-green-500",
+        submissionStatus: "Submissions open",
+        submissionColor: "text-green-500",
+      };
+    } else {
+      return {
+        status: "Ended",
+        color: "text-red-500",
+        submissionStatus: "Submissions closed",
+        submissionColor: "text-red-500",
+      };
+    }
+  };
+
+  const statusInfo = getBountyStatus(new Date(bounty.startAt), new Date(bounty.endAt), new Date());
+
   // Function to send a wish
   const sendWish = async () => {
     if (account === null) {
@@ -237,6 +278,8 @@ export default function Bounty({ params }: any) {
           title: "Failed to send wish",
         });
       }
+
+
 
       await provider.waitForTransaction(response.hash);
 
@@ -303,12 +346,12 @@ export default function Bounty({ params }: any) {
                       d="M11.5 3a9.5 9.5 0 0 1 9.5 9.5a9.5 9.5 0 0 1-9.5 9.5A9.5 9.5 0 0 1 2 12.5A9.5 9.5 0 0 1 11.5 3m0 1A8.5 8.5 0 0 0 3 12.5a8.5 8.5 0 0 0 8.5 8.5a8.5 8.5 0 0 0 8.5-8.5A8.5 8.5 0 0 0 11.5 4M11 7h1v5.42l4.7 2.71l-.5.87l-5.2-3z"
                     />
                   </svg>
-                  <span className="ml-1">Submissions open</span>
+                  <span className={`ml-1 ${statusInfo.submissionColor}`}> {statusInfo.submissionStatus}</span>
                 </div>
                 <div className="ml-2">|</div>
                 <div className="flex ml-3 mt-[2px] justify-start items-center">
-                  <div className="bg-green-500 w-2 h-2 rounded-full pulse-green"></div>
-                  <span className="ml-2">Live</span>
+                  <div className={statusInfo.color}></div>
+                  <span className={statusInfo.color}>{statusInfo.status}</span>
                 </div>
               </div>
             </div>
@@ -433,9 +476,10 @@ export default function Bounty({ params }: any) {
                         </button>
                       ) : (
                         <button
-                          className="w-full bg-slate-800 text-white p-2 rounded-lg"
-                          ref={btnRef}
-                        >
+                      className={`w-full bg-slate-600 text-white p-2 rounded-lg ${statusInfo.status !== "Live" ? 'cursor-not-allowed' : ''}`}
+                        ref={btnRef}
+                        disabled={statusInfo.status !== "Live"}
+                      >
                           Submit Now
                         </button>
                       )}
