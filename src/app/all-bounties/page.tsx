@@ -11,6 +11,7 @@ import { useBounties, useUserType } from "@/hooks/hooks";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+  
 
 const AllBountiesPage = () => {
   const { account } = useWallet();
