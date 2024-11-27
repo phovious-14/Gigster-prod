@@ -38,10 +38,6 @@ import { useRouter } from "next/navigation";
 import { formatDateToDDMMYYYYHM } from "@/components/formatDateToDDMMYYYYHM/formatDateToDDMMYYYYHM";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Network, Provider } from "aptos";
-import { Gift, Loader2, Send } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import Navbar from "@/components/_navbar/Navbar";
 
 const markdownConfig: Options = {
@@ -53,29 +49,17 @@ const markdownConfig: Options = {
   fence: "`",
 };
 
-const provider = new Provider(Network.MAINNET);
-
 const BASE_URL = process.env.NEXT_PUBLIC_GIGSTER_BACKEND_BASE_URL || "";
 
-const MODULE_ADDRESS =
-  "0xb4c500b5a0beba1a70f41a2479c86e7d611bfaa381403d00971cef13040fb3d3";
-
 export default function Bounty({ params }: any) {
-  const { account, signAndSubmitTransaction } = useWallet();
+  const { account } = useWallet();
   const [bounty, setBounty] = useState<any>([]);
   const [isSubmitted, setIsSubmitted] = useState<Boolean>(false);
   const router = useRouter();
   const btnRef = useRef(null);
   const { bountyId } = params;
   const { toast } = useToast();
-
-  const [receiverAddress, setReceiverAddress] = useState("");
-  const [greeting, setGreeting] = useState("");
-  const [pendingWishes, setPendingWishes] = useState([]);
-  const [receivedWishes, setReceivedWishes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const [formData, setFormData] = useState<any>({
     title: "",
@@ -103,13 +87,12 @@ export default function Bounty({ params }: any) {
       return;
     }
 
-    
     if (!formData.submissionLink) {
-      alert('Please fill in all required fields.');
+      alert("Please fill in all required fields.");
       return;
     }
     // Submit the form
-    console.log('Form submitted', formData);
+    console.log("Form submitted", formData);
 
     try {
       formData.walletAddress = account?.address;
@@ -139,12 +122,14 @@ export default function Bounty({ params }: any) {
 
   const fetchBounty = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(
         `${BASE_URL}/api/get_bounty_by_id/${bountyId}`
       );
       if (response.ok) {
         const data: any = await response.json();
         setBounty(data);
+        setIsLoading(false);
       } else {
         alert("Failed to create sponsor profile");
       }
@@ -154,8 +139,6 @@ export default function Bounty({ params }: any) {
       );
       if (response2.ok) {
         const data: any = await response2.json();
-        console.log("is submitted", data?.isSubmitted);
-
         setIsSubmitted(data?.isSubmitted);
       } else {
         alert("Failed to create sponsor profile");
@@ -165,35 +148,25 @@ export default function Bounty({ params }: any) {
     }
   };
 
-  // Function to check if a resource exists at an address
-  const checkResourceExists = async (address: string) => {
-    try {
-      const resources = await provider.getAccountResources(address);
-      return resources.some(
-        (resource) =>
-          resource.type === `${MODULE_ADDRESS}::diwali_wish::DiwaliWish`
-      );
-    } catch (error) {
-      console.error("Error checking resource:", error);
-      return false;
-    }
-  };
-
   // Helper function to calculate the time difference
-function getTimeDifference(date1: any, date2: any) {
-  const diff = date2 - date1;
-  const minutes = Math.floor(diff / (1000 * 60));
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  function getTimeDifference(date1: any, date2: any) {
+    const diff = date2 - date1;
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  if (days > 0) return `${days} days`;
-  if (hours > 0) return `${hours} hours`;
-  if (minutes > 0) return `${minutes} minutes`;
-  return "a few moments";
-}
+    if (days > 0) return `${days} days`;
+    if (hours > 0) return `${hours} hours`;
+    if (minutes > 0) return `${minutes} minutes`;
+    return "a few moments";
+  }
 
   //FUNCTION TO DATE CONFIGURE
-  const getBountyStatus = (startDate: Date, endDate: Date, currentDate: Date) => {
+  const getBountyStatus = (
+    startDate: Date,
+    endDate: Date,
+    currentDate: Date
+  ) => {
     if (currentDate < startDate) {
       return {
         status: `Starting in ${getTimeDifference(currentDate, startDate)}`,
@@ -218,86 +191,17 @@ function getTimeDifference(date1: any, date2: any) {
     }
   };
 
-  const statusInfo = getBountyStatus(new Date(bounty.startAt), new Date(bounty.endAt), new Date());
-
-  // Function to send a wish
-  const sendWish = async () => {
-    if (account === null) {
-      toast({
-        title: "Wallet connection required.",
-        description: "You need to connect aptos wallet",
-        variant: "default",
-      });
-      return;
-    }
-
-    if (!receiverAddress || !greeting) {
-      setError("Please fill in both receiver address and greeting");
-      return;
-    }
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      // Check if receiver already has a wish
-      const hasWish = await checkResourceExists(receiverAddress);
-      if (hasWish) {
-        setError("Receiver already has a pending wish!");
-        return;
-      }
-
-      const response = await signAndSubmitTransaction({
-        sender: account?.address,
-        data: {
-          function: `${MODULE_ADDRESS}::diwali_wish::send_wish`,
-          typeArguments: [],
-          functionArguments: [receiverAddress, greeting],
-        },
-      });
-
-      const response2 = await fetch(`${BASE_URL}/api/add_diwali_wish`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          receiverAddress,
-          greeting,
-        }),
-      });
-      if (response2.ok) {
-        setSuccess("Wish sent successfully! 🪔");
-        setReceiverAddress("");
-        setGreeting("");
-        toast({
-          title: "You have sent Diwali wishes",
-        });
-      } else {
-        toast({
-          title: "Failed to send wish",
-        });
-      }
-
-
-
-      await provider.waitForTransaction(response.hash);
-
-      // Refresh wishes after sending
-      // fetchWishes();
-    } catch (error) {
-      setError(`Failed to send wish: ${error}`);
-    } finally {
-      setIsLoading(false);
-      toast({
-        title: "You have sent Diwali wishes",
-      });
-    }
-  };
+  const statusInfo = getBountyStatus(
+    new Date(bounty.startAt),
+    new Date(bounty.endAt),
+    new Date()
+  );
 
   useEffect(() => {
     fetchBounty();
   }, [bountyId]);
+
+  if(isLoading) return <div className="h-screen w-screen flex justify-center items-center"><div className="loading"></div></div>
 
   return (
     <>
@@ -346,7 +250,10 @@ function getTimeDifference(date1: any, date2: any) {
                       d="M11.5 3a9.5 9.5 0 0 1 9.5 9.5a9.5 9.5 0 0 1-9.5 9.5A9.5 9.5 0 0 1 2 12.5A9.5 9.5 0 0 1 11.5 3m0 1A8.5 8.5 0 0 0 3 12.5a8.5 8.5 0 0 0 8.5 8.5a8.5 8.5 0 0 0 8.5-8.5A8.5 8.5 0 0 0 11.5 4M11 7h1v5.42l4.7 2.71l-.5.87l-5.2-3z"
                     />
                   </svg>
-                  <span className={`ml-1 ${statusInfo.submissionColor}`}> {statusInfo.submissionStatus}</span>
+                  <span className={`ml-1 ${statusInfo.submissionColor}`}>
+                    {" "}
+                    {statusInfo.submissionStatus}
+                  </span>
                 </div>
                 <div className="ml-2">|</div>
                 <div className="flex ml-3 mt-[2px] justify-start items-center">
@@ -373,52 +280,6 @@ function getTimeDifference(date1: any, date2: any) {
           </div>
           <div className="flex justify-center items-start flex-row mt-2">
             <div className="w-[30%]">
-              {bounty._id == "671f0d1ea06d723723679c76" && (
-                <div className="w-full mx-auto py-4 space-y-4">
-                  {/* Send Wish Card */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Gift className="h-5 w-5" />
-                        Send Diwali Wish
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <Input
-                        placeholder="Receiver Address (0x...)"
-                        value={receiverAddress}
-                        onChange={(e) => setReceiverAddress(e.target.value)}
-                        disabled={isLoading}
-                      />
-                      <Input
-                        placeholder="Your Diwali Greeting"
-                        value={greeting}
-                        onChange={(e) => setGreeting(e.target.value)}
-                        disabled={isLoading}
-                      />
-                      <Button
-                        onClick={sendWish}
-                        disabled={
-                          isLoading ||
-                          !receiverAddress ||
-                          !greeting ||
-                          !account?.address
-                        }
-                        className="w-full"
-                      >
-                        {isLoading ? (
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        ) : (
-                          <Send className="mr-2 h-4 w-4" />
-                        )}
-                        Send Wish
-                      </Button>
-                    </CardContent>
-                  </Card>
-
-                  {/* Status Messages */}
-                </div>
-              )}
               <p className="p-4 text-slate-500 border-[1px] border-transparent border-b-slate-300">
                 Prizes
               </p>
@@ -476,10 +337,14 @@ function getTimeDifference(date1: any, date2: any) {
                         </button>
                       ) : (
                         <button
-                      className={`w-full bg-slate-600 text-white p-2 rounded-lg ${statusInfo.status !== "Live" ? 'cursor-not-allowed' : ''}`}
-                        ref={btnRef}
-                        disabled={statusInfo.status !== "Live"}
-                      >
+                          className={`w-full bg-slate-600 text-white p-2 rounded-lg ${
+                            statusInfo.status !== "Live"
+                              ? "cursor-not-allowed"
+                              : ""
+                          }`}
+                          ref={btnRef}
+                          disabled={statusInfo.status !== "Live"}
+                        >
                           Submit Now
                         </button>
                       )}
@@ -665,7 +530,7 @@ function getTimeDifference(date1: any, date2: any) {
                 )}
               </div>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     </>
