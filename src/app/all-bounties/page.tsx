@@ -11,19 +11,21 @@ import { useBounties, useUserType } from "@/hooks/hooks";
 import { useWallet } from "@aptos-labs/wallet-adapter-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-  
 
 const AllBountiesPage = () => {
   const { account } = useWallet();
   const router = useRouter();
 
-  const { data: userData } = useUserType(account?.address || "");  
-  const { data: bountiesData, isLoading: bountiesLoading } = useBounties(account?.address || undefined, userData?.userType || undefined);
+  const { data: userData } = useUserType(account?.address || "");
+  const { data: bountiesData, isLoading: bountiesLoading } = useBounties(
+    account?.address || undefined,
+    userData?.userType || undefined
+  );
 
   useEffect(() => {
     if (userData?.userType === "") {
       toast({
-        title: 'Kindly create profile',
+        title: "Kindly create profile",
         duration: 3000,
       });
       router.push("/");
@@ -57,9 +59,11 @@ const AllBountiesPage = () => {
               Welcome{" "}
               {userData?.userType === "hunter"
                 ? userData?.user?.name
-                : userData?.userType === "sponser" ? userData?.user?.companyName : ""}
+                : userData?.userType === "sponser"
+                ? userData?.user?.companyName
+                : ""}
             </div>
-            <Bounty 
+            <Bounty
               bounties={bountiesData}
               userType={userData?.userType || "hunter"}
               userAddress={account?.address || ""}
